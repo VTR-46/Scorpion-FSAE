@@ -5,16 +5,268 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scorpion FSAE</title>
-    <link href="./src/output.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:ital,wght@0,400;0,500;0,600;0,700;1,700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="./dist/output.css">
 </head>
 
 <body>
-    <h1 class="text-3xl font-bold underline">
-        Hello world!
-    </h1>
+
+    <!-- Tela de Loading (5s) -->
+    <div id="loadingScreen">
+        <video id="loadingVideo" autoplay muted loop playsinline>
+            <source src="./img/Scorpion/ScorpionRUN-opt.mp4" type="video/mp4">
+        </video>
+        <div id="loadingBar">
+            <div id="loadingBarFill"></div>
+        </div>
+    </div>
+
+    <header>
+        <nav>
+            <a href="#" class="logo">
+                <img src="./img/Scorpion/SCORPION FSAE LOGO FULL 1.png" alt="Scorpion FSAE">
+                <span class="logo-text">Scorpion <em>FSAE</em></span>
+            </a>
+
+            <ul>
+                <li><a href="#equipe">Equipe</a></li>
+                <li><a href="./html/patrocinio.html">Patrocinadores</a></li>
+                <li><a href="#competicao">Competição</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="homeSection">
+            <div class="video-sticky-wrapper">
+                <video id="scrollVideo" preload="metadata" playsinline muted>
+                    <source src="./img/Scorpion/V-opt.mp4" type="video/mp4">
+                </video>
+                <div id="videoDim"></div>
+                <div id="videoLoader" style="
+    position: absolute; inset: 0; z-index: 3;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg-section);
+    transition: opacity 0.5s ease;
+  ">
+                    <span style="font-family: var(--font-display); font-size: 1.2rem; color: var(--cyan);">
+                        Carregando...
+                    </span>
+                </div>
+                <div id="txtImgHome">
+                    <h1>SCORPION FSAE</h1>
+                    <p>O Desafio nos move!</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="homeSection2">
+            <div id="section-a">
+                <h2>Iniciantes hoje, referencia amanhã</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam nihil accusantium saepe, quidem quis
+                    voluptatum officia possimus rem quam enim in ipsa expedita magni hic. Voluptate dolorem eaque
+                    doloremque
+                    unde!</p>
+                <div id="homeSection2Bt">
+                    <button class="p1-bnt">
+                        VEJA A EQUIPE
+                    </button>
+                    <button class="p2-bnt">
+                        APOIE A SCORPION
+                    </button>
+                </div>
+
+            </div>
+            <div>
+                <img src="./img/Scorpion/ScorpionBannerI.png" alt="">
+            </div>
+        </section>
+    </main>
 
 
-    <script src="../Scorpion FSAE/node_modules/flowbite/dist/flowbite.min.js"></script>
+
+
+<script src="./node_modules/flowbite/dist/flowbite.min.js"></script>
 </body>
+<script>
+    // ===================== TELA DE LOADING (5s) =====================
+    (function () {
+        const LOADING_DURATION = 2000; // 5 segundos
+
+        function startLoading() {
+            const screen = document.getElementById('loadingScreen');
+            const barFill = document.getElementById('loadingBarFill');
+            const loadingVideo = document.getElementById('loadingVideo');
+
+            if (!screen || !barFill) return;
+
+            // Bloqueia o scroll durante o loading
+            document.body.style.overflow = 'hidden';
+
+            // Garante o vídeo tocando
+            if (loadingVideo) {
+                loadingVideo.play().catch(() => { });
+            }
+
+            const startTime = performance.now();
+
+            function tick(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(1, elapsed / LOADING_DURATION);
+
+                // Preenche a barra de 0 a 100%
+                barFill.style.width = (progress * 100).toFixed(2) + '%';
+
+                if (progress < 1) {
+                    requestAnimationFrame(tick);
+                } else {
+                    finishLoading(screen);
+                }
+            }
+
+            requestAnimationFrame(tick);
+
+            // Fallback de segurança: esconde mesmo se algo falhar
+            setTimeout(() => finishLoading(screen), LOADING_DURATION + 1000);
+        }
+
+        function finishLoading(screen) {
+            if (screen.dataset.done) return;
+            screen.dataset.done = 'true';
+
+            // Libera o scroll
+            document.body.style.overflow = '';
+
+            // Fade out da tela de loading
+            screen.classList.add('hidden');
+
+            // Remove do DOM após a transição
+            setTimeout(() => {
+                if (screen.parentNode) screen.parentNode.removeChild(screen);
+            }, 700);
+        }
+
+        // Inicia quando o DOM estiver pronto
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', startLoading);
+        } else {
+            startLoading();
+        }
+    })();
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const section = document.getElementById('homeSection');
+        const video = document.getElementById('scrollVideo');
+        const header = document.querySelector('header');
+        const txtImgHome = document.getElementById('txtImgHome');
+        const videoDim = document.getElementById('videoDim');
+
+        if (!section || !video) return;
+
+        // Respeita preferência de movimento reduzido
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            video.pause();
+            const loader = document.getElementById('videoLoader');
+            if (loader) loader.style.display = 'none';
+            return;
+        }
+
+        let videoReady = false;
+        let ticking = false;
+        let lastTime = 0;
+        let seekThreshold = 0.04; // ~4% de tolerância para evitar seeks desnecessários
+        let wasScrolling = false; // controla o estado de visibilidade do header/texto
+
+        // Habilita controle assim que os metadados estiverem disponíveis
+        function enableScrollControl() {
+            if (videoReady) return;
+            videoReady = true;
+
+            const loader = document.getElementById('videoLoader');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 500);
+            }
+
+            // Congela o primeiro frame sem dar play
+            video.currentTime = 0;
+            updateVideoTime();
+        }
+
+        // Ativa com loadedmetadata (mais rápido que canplaythrough)
+        if (video.readyState >= 1) {
+            enableScrollControl();
+        } else {
+            video.addEventListener('loadedmetadata', enableScrollControl, { once: true });
+        }
+
+        // Remove o .load() forçado — com preload="metadata" já é suficiente
+
+        // Timeout de segurança reduzido (5s)
+        setTimeout(() => {
+            if (!videoReady) enableScrollControl();
+        }, 5000);
+
+        // Mostra ou esconde header + texto conforme o progresso do scroll
+        function setOverlayVisible(visible) {
+            if (wasScrolling === visible) return;
+            wasScrolling = visible;
+
+            if (header) header.classList.toggle('header-hidden', !visible);
+            if (txtImgHome) txtImgHome.classList.toggle('text-hidden', !visible);
+        }
+
+        function updateVideoTime() {
+            ticking = false;
+            if (!videoReady || !video.duration) return;
+
+            const rect = section.getBoundingClientRect();
+            const sectionHeight = section.offsetHeight;
+            const viewportHeight = window.innerHeight;
+            const scrollable = sectionHeight - viewportHeight;
+            const scrolled = Math.max(0, -rect.top);
+            const rawProgress = Math.min(1, Math.max(0, scrolled / scrollable));
+
+            // Easing suave (smoothstep) — vídeo avança mais devagar no início e no fim
+            const progress = rawProgress * rawProgress * (3 - 2 * rawProgress);
+
+            const targetTime = progress * video.duration;
+
+            // Só faz seek se a diferença for significativa (evita seeks desnecessários)
+            if (Math.abs(targetTime - video.currentTime) > seekThreshold && targetTime !== lastTime) {
+                lastTime = targetTime;
+                video.currentTime = targetTime;
+            }
+
+            // Overlay de escurecimento: começa escuro (0.45) e clareia até 0 conforme o scroll avança
+            if (videoDim) {
+                const dimOpacity = Math.max(0, 0.45 * (1 - progress * 1.4));
+                videoDim.style.opacity = dimOpacity.toFixed(3);
+            }
+
+            // Esconde header e texto enquanto o vídeo está rolando (progresso entre 1% e 99%)
+            const isScrolling = progress > 0.01 && progress < 0.99;
+            setOverlayVisible(!isScrolling);
+        }
+
+        function onScroll() {
+            if (!ticking && videoReady) {
+                ticking = true;
+                requestAnimationFrame(updateVideoTime);
+            }
+        }
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', updateVideoTime);
+    });
+</script>
 
 </html>
