@@ -19,7 +19,31 @@ document.addEventListener('DOMContentLoaded', () => {
     let ticking = false;
     let lastTime = 0;
     let seekThreshold = 0.04; // ~4% de tolerância para evitar seeks desnecessários
-    let wasScrolling = false; // controla o estado de visibilidade do header/texto
+
+    // ===== HEADER: mostra ao rolar para CIMA, esconde ao rolar para BAIXO =====
+    let lastScrollY = window.scrollY;
+    let headerTicking = false;
+
+    function updateHeader(scrollY) {
+        if (!header) return;
+
+        const scrollDelta = scrollY - lastScrollY;
+        lastScrollY = scrollY;
+
+        // No topo da página (ou quase), o header fica sempre visível
+        if (scrollY <= 0) {
+            header.classList.remove('header-hidden');
+            return;
+        }
+
+        if (scrollDelta > 2) {
+            // Rolar para baixo → esconde o header
+            header.classList.add('header-hidden');
+        } else if (scrollDelta < -2) {
+            // Rolar para cima → mostra o header
+            header.classList.remove('header-hidden');
+        }
+    }
 
     // Habilita controle assim que os metadados estiverem disponíveis
     function enableScrollControl() {
@@ -52,13 +76,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 5000);
 
     // Mostra ou esconde header + texto conforme o progresso do scroll
-    // function setOverlayVisible(visible) {
-    //     if (wasScrolling === visible) return;
-    //     wasScrolling = visible;
+    //  function setOverlayVisible(visible) {
+    //      if (wasScrolling === visible) return;
+    //      wasScrolling = visible;
 
-    //     if (header) header.classList.toggle('header-hidden', !visible);
-    //     if (txtImgHome) txtImgHome.classList.toggle('text-hidden', !visible);
-    // }
+    //      if (header) header.classList.toggle('header-hidden', !visible);
+    //      if (txtImgHome) txtImgHome.classList.toggle('text-hidden', !visible);
+    //  }
 
     function updateVideoTime() {
         ticking = false;
@@ -90,10 +114,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Esconde header e texto enquanto o vídeo está rolando (progresso entre 1% e 99%)
         const isScrolling = progress > 0.01 && progress < 0.99;
-        setOverlayVisible(!isScrolling);
+        //setOverlayVisible(!isScrolling);
     }
 
     function onScroll() {
+        const scrollY = window.scrollY;
+
+        // Atualiza o header (mostrar ao rolar para cima / esconder ao rolar para baixo)
+        if (!headerTicking) {
+            headerTicking = true;
+            requestAnimationFrame(() => {
+                updateHeader(scrollY);
+                headerTicking = false;
+            });
+        }
+
+        // Atualiza o tempo do vídeo
         if (!ticking && videoReady) {
             ticking = true;
             requestAnimationFrame(updateVideoTime);
@@ -102,4 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', updateVideoTime);
+
+    // Garante que o header aparece quando a página carrega no topo
+    updateHeader(window.scrollY);
 });

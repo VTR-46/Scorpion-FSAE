@@ -291,6 +291,7 @@
     --color-brand-medium: var(--color-blue-200);
     --color-brand-strong: var(--color-blue-800);
     --color-dark: var(--color-gray-800);
+    --color-pink: var(--color-pink-600);
     --color-light: var(--color-gray-100);
     --color-default: var(--color-gray-200);
     --color-default-medium: var(--color-gray-200);
