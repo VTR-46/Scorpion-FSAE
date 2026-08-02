@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.querySelector('header');
     const txtImgHome = document.getElementById('txtImgHome');
     const videoDim = document.getElementById('videoDim');
+    const homeSection2 = document.getElementById('homeSection2');
 
     if (!section || !video) return;
 
@@ -112,9 +113,30 @@ document.addEventListener('DOMContentLoaded', () => {
             videoDim.style.opacity = dimOpacity.toFixed(3);
         }
 
-        // Esconde header e texto enquanto o vídeo está rolando (progresso entre 1% e 99%)
-        const isScrolling = progress > 0.01 && progress < 0.99;
-        //setOverlayVisible(!isScrolling);
+        // homeSection2 com FADE GRADUAL conforme o usuário rola
+        // fade começa em 72% e termina em 100% do progresso do vídeo
+        if (homeSection2) {
+            const fadeStart = 0.72;
+            const fadeEnd = 1.0;
+            const fadeProgress = Math.min(1, Math.max(0, (progress - fadeStart) / (fadeEnd - fadeStart)));
+
+            // Opacidade gradual (0 → 1)
+            homeSection2.style.opacity = fadeProgress.toFixed(3);
+
+            // Leve zoom acompanhando o fade (0.94x → 1x)
+            homeSection2.style.transform = `scale(${(0.94 + 0.06 * fadeProgress).toFixed(3)})`;
+
+            // Desfoque que some conforme o fade avança
+            homeSection2.style.filter = `blur(${(10 * (1 - fadeProgress)).toFixed(2)}px)`;
+
+            // Habilita interação (botões) quando já estiver bem visível
+            const interactive = fadeProgress > 0.5;
+            homeSection2.style.pointerEvents = interactive ? 'auto' : 'none';
+            homeSection2.setAttribute('aria-hidden', interactive ? 'false' : 'true');
+
+            // Esconde o texto principal para dar lugar ao overlay durante o fade
+            if (txtImgHome) txtImgHome.classList.toggle('text-hidden', fadeProgress > 0.05);
+        }
     }
 
     function onScroll() {

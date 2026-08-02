@@ -328,20 +328,9 @@ section {
 }
 
 
-/* DEGRADE */
-
-#homeSection::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom,
-      rgba(0, 0, 0, 0.35) 0%,
-      rgba(0, 0, 0, 0.05) 40%,
-      rgba(0, 0, 0, 0.505) 80%,
-      rgba(0, 0, 0, 0.775) 100%);
-  pointer-events: none;
-  z-index: 0;
-}
+/* O escurecimento do vídeo é feito apenas pelo .video-sticky-wrapper::after
+   (z-index: 1, abaixo da #homeSection2 que tem z-index: 2).
+   O antigo #homeSection::after cobria a #homeSection2 por cima. */
 
 #homeSection img {
   width: 100%;
@@ -353,19 +342,39 @@ section {
 }
 
 
+/* homeSection2 como overlay com FADE GRADUAL controlado pelo scroll (js/ui.js) */
 #homeSection2 {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: center;
-  background-color: black;
+  gap: 3rem;
+  padding: 2rem;
+  background: black;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  opacity: 0;                  /* JS controla o fade conforme o scroll */
+  transform: scale(0.94);      /* JS controla o zoom conforme o scroll */
+  filter: blur(10px);          /* JS controla o desfoque conforme o scroll */
+  pointer-events: none;        /* JS habilita quando estiver visível */
+}
+
+/* Mantido por compatibilidade (o JS usa estilos inline) */
+#homeSection2.show {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+  pointer-events: auto;
 }
 
 #homeSection2 h2 {
-  display: flex;
   font-style: italic;
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 3.15rem;
+  font-size: clamp(1.8rem, 4.5vw, 3.15rem);
   letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--white);
@@ -375,7 +384,14 @@ section {
 }
 
 #homeSection2 p {
-  width: 500px;
+  max-width: 500px;
+}
+
+#homeSection2 img {
+  max-width: min(380px, 40vw);
+  height: auto;
+  border-radius: 12px;
+
 }
 
 
@@ -551,6 +567,18 @@ section#apoiadores {
   nav ul {
     justify-content: center;
     gap: 1.25rem 1.75rem;
+  }
+
+  /* Overlay da homeSection2 vira coluna em telas médias */
+  #homeSection2 {
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow-y: auto;
+    text-align: center;
+  }
+
+  #homeSection2 img {
+    max-width: min(300px, 70vw);
   }
 }
 
