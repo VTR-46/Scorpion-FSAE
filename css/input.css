@@ -542,7 +542,6 @@ section {
   letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--white);
-  white-space: nowrap;
   text-shadow: 0 0 36px rgba(0, 179, 254, 0.25);
 
 }
@@ -694,6 +693,64 @@ section#apoiadores {
   #homeSection2 img {
     max-width: min(300px, 70vw);
   }
+
+  /* Overlay da homeSection3 também vira coluna em telas médias */
+  #homeSection3Content {
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow-y: auto;
+    text-align: center;
+  }
+
+  #homeSection3Content img {
+    max-width: min(300px, 70vw);
+  }
+
+  /* Títulos longos podem quebrar linha sem estourar a tela */
+  #homeSection2 h2,
+  #homeSection3 h2 {
+    white-space: normal;
+    text-wrap: balance;
+  }
+
+  .section-btns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .p1-bnt,
+  .p2-bnt {
+    font-size: 1.35rem;
+    padding: 0.65rem 1.25rem;
+  }
+
+  #homeSection2Bt,
+  .section-btns {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  #homeSection2,
+  #homeSection3Content {
+    padding: 1.25rem;
+    gap: 1.25rem;
+  }
+
+  #homeSection2 h2,
+  #homeSection3 h2 {
+    font-size: clamp(1.5rem, 5.5vw, 2.2rem);
+    line-height: 1.15;
+  }
+
+  #homeSection4 h2 {
+    font-size: clamp(1.5rem, 5.5vw, 2.2rem);
+    line-height: 1.15;
+  }
 }
 
 @media (max-width: 480px) {
@@ -703,6 +760,59 @@ section#apoiadores {
 
   section {
     padding: 3.5rem 1.25rem;
+  }
+
+  /* Header mais compacto em telas pequenas */
+  .logo img {
+    height: 56px;
+  }
+
+  .logo-text {
+    font-size: 1rem;
+  }
+
+  /* Botões ocupam a largura toda e empilham em telas muito pequenas */
+  .p1-bnt,
+  .p2-bnt {
+    font-size: 1.05rem;
+    padding: 0.6rem 1rem;
+    width: 100%;
+  }
+
+  #homeSection2Bt,
+  .section-btns {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.75rem;
+  }
+
+  #homeSection2 img,
+  #homeSection3Content img {
+    max-width: min(220px, 70vw);
+  }
+
+  #homeSection2,
+  #homeSection3Content {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  #homeSection2 h2,
+  #homeSection3 h2 {
+    font-size: clamp(1.35rem, 6vw, 1.75rem);
+  }
+
+  #homeSection4 > div {
+    padding: 3.5rem 1.25rem;
+  }
+
+  #homeSection4 h2 {
+    font-size: clamp(1.35rem, 6vw, 1.75rem);
+  }
+
+  #homeSection4 p {
+    font-size: 1rem;
   }
 }
 
