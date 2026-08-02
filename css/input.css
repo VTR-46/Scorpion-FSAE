@@ -229,7 +229,7 @@ section {
 
 #homeSection {
   position: relative;
-  height: 300vh;           /* 100vh vídeo + 200vh de scroll → vídeo avança mais devagar */
+  height: 400vh;           /* 100vh video + 300vh de scroll - mais espaco = video mais lento */
   padding: 0;
   /* border-bottom: 2px solid var(--yellow); */
 }
@@ -444,6 +444,120 @@ section {
   justify-content: center;
   margin-top: 1.5rem;
   gap: 1.0rem;
+}
+
+#homeSection3 {
+  position: relative;
+  height: 400vh;           /* 100vh video + 300vh de scroll - mais espaco = video mais lento */
+  padding: 0;
+  background-color: #111129;
+}
+
+/* Wrapper sticky do vídeo da homeSection3 */
+.video-sticky-wrapper-3 {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Vídeo de fundo */
+#scrollVideo3 {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  position: relative;
+  z-index: 0;
+  will-change: transform;
+}
+
+/* Overlay de escurecimento (clareia conforme avança) */
+#videoDim3 {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0.45;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Conteúdo da homeSection3 (surge com fade no meio do scroll) */
+#homeSection3Content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  padding: 2rem;
+  opacity: 0;                  /* JS controla o fade conforme o scroll */
+  transform: scale(0.94);
+  will-change: opacity, transform;
+  pointer-events: none;
+}
+
+#homeSection3Content.show {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+#homeSection3 h2 {
+  font-style: italic;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.8rem, 4.5vw, 3.15rem);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--white);
+  white-space: nowrap;
+  text-shadow: 0 0 36px rgba(0, 179, 254, 0.25);
+
+}
+
+#homeSection4{
+  min-height: 100vh;
+  padding: 0;
+  background-color: #111129;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+#homeSection4 > div {
+  width: 100%;
+  max-width: var(--max-width);
+  padding: 5rem 1.5rem;
+}
+
+#homeSection4 h2 {
+  font-style: italic;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.8rem, 4.5vw, 3.15rem);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--white);
+  white-space: nowrap;
+  text-shadow: 0 0 36px rgba(0, 179, 254, 0.25);
+
+}
+
+#homeSection4 p {
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#homeSection4 img {
+  max-width: min(380px, 40vw);
+  height: auto;
+  border-radius: 12px;
+
 }
 
 section#apoiadores {
