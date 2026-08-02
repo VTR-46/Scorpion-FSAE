@@ -29,14 +29,18 @@
 
 /*======================PAGINA DE PATROCINIO===================*/
 :root {
-  --bg-header: #131326;      /* header / navbar, quase preto-arroxeado */
-  --bg-section: #0e1c37;     /* fundo das seções, azul-marinho */
+  --bg-header: #131326;
+  /* header / navbar, quase preto-arroxeado */
+  --bg-section: #0e1c37;
+  /* fundo das seções, azul-marinho */
   --card-bg: rgba(238, 237, 241, 0.035);
   --card-border: rgba(175, 173, 188, 0.35);
   --card-border-hover: #00b3fe;
 
-  --yellow: #f2f230;         /* patrocinadores (tier principal) */
-  --cyan: #00b3fe;           /* apoiadores (tier secundário) + destaques */
+  --yellow: #f2f230;
+  /* patrocinadores (tier principal) */
+  --cyan: #00b3fe;
+  /* apoiadores (tier secundário) + destaques */
   --white: #eeedf1;
   --muted: #afadbc;
 
@@ -65,6 +69,48 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/*======================TELA DE LOADING===================*/
+#loadingScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: #0F1027;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+#loadingScreen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+#loadingVideo {
+  width: min(480px, 70vw);
+  max-height: 50vh;
+  object-fit: contain;
+}
+
+#loadingBar {
+  width: min(480px, 70vw);
+  height: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+#loadingBarFill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #00b3fe, #f2f230);
+  border-radius: 999px;
+  transition: width 0.1s linear;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -81,8 +127,22 @@ ul {
 
 
 header {
-  background: var(--bg-header);
-  border-bottom: 2px solid var(--cyan);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(19, 19, 38, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 179, 254, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+header.header-hidden {
+  transform: translateY(-100%);
+  opacity: 0;
 }
 
 nav {
@@ -107,6 +167,7 @@ nav {
 }
 
 .logo-text {
+  font-style: italic;
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 1.15rem;
@@ -117,7 +178,6 @@ nav {
 }
 
 .logo-text em {
-  font-style: italic;
   font-weight: 700;
   color: var(--cyan);
 }
@@ -164,6 +224,339 @@ nav ul a:focus-visible::after {
 
 section {
   padding: 5rem 1.5rem;
+}
+
+
+#homeSection {
+  position: relative;
+  height: 400vh;           /* 100vh video + 300vh de scroll - mais espaco = video mais lento */
+  padding: 0;
+  /* border-bottom: 2px solid var(--yellow); */
+}
+
+.video-sticky-wrapper {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Gradient e overlay ficam no wrapper, não na section inteira */
+.video-sticky-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0.35) 0%,
+      rgba(0, 0, 0, 0.05) 40%,
+      rgba(0, 0, 0, 0.505) 80%,
+      rgba(0, 0, 0, 0.775) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+#scrollVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  position: relative;
+  z-index: 0;
+  /* GPU acceleration para seeks mais suaves */
+  will-change: transform;
+}
+
+/* Overlay de escurecimento no início do vídeo */
+#videoDim {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0.45;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* O texto continua por cima de tudo */
+#txtImgHome {
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  padding: 0 1rem;
+  z-index: 2;
+  font-style: italic;
+  font-family: var(--font-display);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+#txtImgHome.text-hidden {
+  opacity: 0;
+  transform: translate(-50%, -50%) translateY(20px);
+  pointer-events: none;
+}
+
+#txtImgHome h1 {
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--white);
+  text-shadow: 0 0 48px rgba(0, 179, 254, 0.45), 0 4px 24px rgba(0, 0, 0, 0.6);
+}
+
+#txtImgHome p {
+  margin-top: 0.5rem;
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  text-shadow: 0 0 24px rgba(0, 179, 254, 0.5);
+}
+
+#homeSection p {
+  font-size: 1.15rem;
+
+}
+
+#homeSection img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
+
+/* O escurecimento do vídeo é feito apenas pelo .video-sticky-wrapper::after
+   (z-index: 1, abaixo da #homeSection2 que tem z-index: 2).
+   O antigo #homeSection::after cobria a #homeSection2 por cima. */
+
+#homeSection img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  position: relative;
+  z-index: 0;
+}
+
+
+/* homeSection2 como overlay com FADE GRADUAL controlado pelo scroll (js/ui.js) */
+#homeSection2 {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  padding: 2rem;
+  background: black;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  opacity: 0;                  /* JS controla o fade conforme o scroll */
+  transform: scale(0.94);      /* JS controla o zoom conforme o scroll */
+  filter: blur(10px);          /* JS controla o desfoque conforme o scroll */
+  pointer-events: none;        /* JS habilita quando estiver visível */
+}
+
+/* Mantido por compatibilidade (o JS usa estilos inline) */
+#homeSection2.show {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+  pointer-events: auto;
+}
+
+#homeSection2 h2 {
+  font-style: italic;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.8rem, 4.5vw, 3.15rem);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--white);
+  white-space: nowrap;
+  text-shadow: 0 0 36px rgba(0, 179, 254, 0.25);
+
+}
+
+#homeSection2 p {
+  max-width: 500px;
+}
+
+#homeSection2 img {
+  max-width: min(380px, 40vw);
+  height: auto;
+  border-radius: 12px;
+
+}
+
+
+.p1-bnt {
+  background-color: rgb(0, 151, 143);
+  border: 2px solid var(--cyan);
+  color: rgb(250, 250, 250);
+  padding: 0.75rem 1.5rem;
+  transition: background-color 0.25s ease;
+  font-family: var(--font-display);
+  font-size: 2.15rem;
+  cursor: pointer;
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.p1-bnt:hover {
+
+  border-color: var(--white);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 179, 254, 0.12);
+  color: rgb(193, 193, 193);
+  background-color: transparent;
+
+}
+
+
+.p2-bnt {
+  border: 2px solid var(--cyan);
+  background-color: transparent;
+  padding: 0.75rem 1.5rem;
+  transition: background-color 0.25s ease;
+  font-family: var(--font-display);
+  font-size: 2.15rem;
+  cursor: pointer;
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.p2-bnt:hover {
+
+  border-color: var(--white);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 179, 254, 0.12);
+  color: rgb(193, 193, 193);
+  background-color: rgb(0, 151, 143);
+
+}
+
+#homeSection2Bt {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+  gap: 1.0rem;
+}
+
+#homeSection3 {
+  position: relative;
+  height: 400vh;           /* 100vh video + 300vh de scroll - mais espaco = video mais lento */
+  padding: 0;
+  background-color: #111129;
+}
+
+/* Wrapper sticky do vídeo da homeSection3 */
+.video-sticky-wrapper-3 {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Vídeo de fundo */
+#scrollVideo3 {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  position: relative;
+  z-index: 0;
+  will-change: transform;
+}
+
+/* Overlay de escurecimento (clareia conforme avança) */
+#videoDim3 {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0.45;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Conteúdo da homeSection3 (surge com fade no meio do scroll) */
+#homeSection3Content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  padding: 2rem;
+  opacity: 0;                  /* JS controla o fade conforme o scroll */
+  transform: scale(0.94);
+  will-change: opacity, transform;
+  pointer-events: none;
+}
+
+#homeSection3Content.show {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+#homeSection3 h2 {
+  font-style: italic;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.8rem, 4.5vw, 3.15rem);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--white);
+  white-space: nowrap;
+  text-shadow: 0 0 36px rgba(0, 179, 254, 0.25);
+
+}
+
+#homeSection4{
+  min-height: 100vh;
+  padding: 0;
+  background-color: #111129;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+#homeSection4 > div {
+  width: 100%;
+  max-width: var(--max-width);
+  padding: 5rem 1.5rem;
+}
+
+#homeSection4 h2 {
+  font-style: italic;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.8rem, 4.5vw, 3.15rem);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--white);
+  text-shadow: 0 0 36px rgba(0, 179, 254, 0.25);
+
+}
+
+#homeSection4 p {
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#homeSection4 img {
+  max-width: min(380px, 40vw);
+  height: auto;
+  border-radius: 12px;
+
 }
 
 section#apoiadores {
@@ -270,7 +663,7 @@ section#apoiadores {
   box-shadow: none;
 }
 
-  /*Responsividade*/
+/*Responsividade*/
 @media (max-width: 900px) {
   .logo-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -288,6 +681,76 @@ section#apoiadores {
     justify-content: center;
     gap: 1.25rem 1.75rem;
   }
+
+  /* Overlay da homeSection2 vira coluna em telas médias */
+  #homeSection2 {
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow-y: auto;
+    text-align: center;
+  }
+
+  #homeSection2 img {
+    max-width: min(300px, 70vw);
+  }
+
+  /* Overlay da homeSection3 também vira coluna em telas médias */
+  #homeSection3Content {
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow-y: auto;
+    text-align: center;
+  }
+
+  #homeSection3Content img {
+    max-width: min(300px, 70vw);
+  }
+
+  /* Títulos longos podem quebrar linha sem estourar a tela */
+  #homeSection2 h2,
+  #homeSection3 h2 {
+    white-space: normal;
+    text-wrap: balance;
+  }
+
+  .section-btns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .p1-bnt,
+  .p2-bnt {
+    font-size: 1.35rem;
+    padding: 0.65rem 1.25rem;
+  }
+
+  #homeSection2Bt,
+  .section-btns {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  #homeSection2,
+  #homeSection3Content {
+    padding: 1.25rem;
+    gap: 1.25rem;
+  }
+
+  #homeSection2 h2,
+  #homeSection3 h2 {
+    font-size: clamp(1.5rem, 5.5vw, 2.2rem);
+    line-height: 1.15;
+  }
+
+  #homeSection4 h2 {
+    font-size: clamp(1.5rem, 5.5vw, 2.2rem);
+    line-height: 1.15;
+  }
 }
 
 @media (max-width: 480px) {
@@ -297,6 +760,59 @@ section#apoiadores {
 
   section {
     padding: 3.5rem 1.25rem;
+  }
+
+  /* Header mais compacto em telas pequenas */
+  .logo img {
+    height: 56px;
+  }
+
+  .logo-text {
+    font-size: 1rem;
+  }
+
+  /* Botões ocupam a largura toda e empilham em telas muito pequenas */
+  .p1-bnt,
+  .p2-bnt {
+    font-size: 1.05rem;
+    padding: 0.6rem 1rem;
+    width: 100%;
+  }
+
+  #homeSection2Bt,
+  .section-btns {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.75rem;
+  }
+
+  #homeSection2 img,
+  #homeSection3Content img {
+    max-width: min(220px, 70vw);
+  }
+
+  #homeSection2,
+  #homeSection3Content {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  #homeSection2 h2,
+  #homeSection3 h2 {
+    font-size: clamp(1.35rem, 6vw, 1.75rem);
+  }
+
+  #homeSection4 > div {
+    padding: 3.5rem 1.25rem;
+  }
+
+  #homeSection4 h2 {
+    font-size: clamp(1.35rem, 6vw, 1.75rem);
+  }
+
+  #homeSection4 p {
+    font-size: 1rem;
   }
 }
 

@@ -5,16 +5,148 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scorpion FSAE</title>
-    <link href="./src/output.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:ital,wght@0,400;0,500;0,600;0,700;1,700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <link rel="shortcut icon" href="./img/Scorpion/LogoOriginalCores.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="./dist/output.css">
+
 </head>
 
 <body>
-    <h1 class="text-3xl font-bold underline">
-        Hello world!
-    </h1>
+
+    <!-- Tela de Loading (5s) -->
+    <div id="loadingScreen">
+        <video id="loadingVideo" autoplay muted loop playsinline>
+            <source src="./img/Scorpion/ScorpionRUN-opt.mp4" type="video/mp4">
+        </video>
+        <div id="loadingBar">
+            <div id="loadingBarFill"></div>
+        </div>
+    </div>
+
+    <header class="main-tool-bar">
+        <nav>
+            <a href="#" class="logo">
+                <img src="./img/Scorpion/SCORPION FSAE LOGO FULL 1.png" alt="Scorpion FSAE">
+                <span class="logo-text">Scorpion <em>FSAE</em></span>
+            </a>
+
+            <ul>
+                <li><a href="#equipe">Equipe</a></li>
+                <li><a href="./html/patrocinio.html">Patrocinadores</a></li>
+                <li><a href="#competicao">Competição</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="homeSection">
+            <div class="video-sticky-wrapper">
+                <video id="scrollVideo" preload="metadata" playsinline muted>
+                    <source src="./img/Scorpion/V-opt.mp4" type="video/mp4">
+                </video>
+                <div id="videoDim"></div>
+                <div id="videoLoader" style="
+    position: absolute; inset: 0; z-index: 3;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg-section);
+    transition: opacity 0.5s ease;
+  ">
+                    <span style="font-family: var(--font-display); font-size: 1.2rem; color: var(--cyan);">
+                        Carregando...
+                    </span>
+                </div>
+                <div id="txtImgHome">
+                    <h1>SCORPION FSAE</h1>
+                    <p>O Desafio nos move!</p>
+                </div>
+
+                <!-- homeSection2 como overlay animado que entra por cima do vídeo no final -->
+                <section id="homeSection2" aria-hidden="true">
+                    <div id="section-a">
+                        <h2>Iniciantes hoje, referencia amanhã</h2>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam nihil accusantium saepe,
+                            quidem quis
+                            voluptatum officia possimus rem quam enim in ipsa expedita magni hic. Voluptate dolorem
+                            eaque
+                            doloremque
+                            unde!</p>
+                        <div id="homeSection2Bt">
+                            <button class="p1-bnt">
+                                VEJA A EQUIPE
+                            </button>
+                            <button class="p2-bnt">
+                                APOIE A SCORPION
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="./img/Scorpion/LogoOriginalCores.png" alt="">
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <section id="homeSection3">
+            <div class="video-sticky-wrapper-3">
+                <video id="scrollVideo3" preload="metadata" playsinline muted>
+                    <source src="./img/Scorpion/ScorpionCarsLR-opt.mp4" type="video/mp4">
+                </video>
+                <div id="videoDim3"></div>
+                <div id="homeSection3Content" aria-hidden="true">
+                    <div id="section-a">
+                        <h2>CONHEÇA UM POUCO DA HISTORIA DA EQUIPE!</h2>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam nihil accusantium saepe,
+                            quidem quis
+                            voluptatum officia possimus rem quam enim in ipsa expedita magni hic. Voluptate dolorem
+                            eaque
+                            doloremque
+                            unde!</p>
+                        <div class="section-btns">
+                            <button class="p1-bnt">
+                                SOBRE A EQUIPE
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="./img/Scorpion/ScorpionBannerI.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="homeSection4" aria-hidden="true">
+            <div id="section-a">
+                <h2>VEJA AQUELES QUE ACELERAM JUNTO COM A SCORPION</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam nihil accusantium saepe,
+                    quidem quis
+                    voluptatum officia possimus rem quam enim in ipsa expedita magni hic. Voluptate dolorem
+                    eaque
+                    doloremque
+                    unde!</p>
+                <div id="homeSection2Bt">
+                    <a href="./html/patrocinio.html"><button class="p1-bnt">
+                        PATROCINADORES
+                    </button></a>
+                    
+                </div>
+            </div>
+        </section>
 
 
-    <script src="../Scorpion FSAE/node_modules/flowbite/dist/flowbite.min.js"></script>
+    </main>
+
+    <script src="./js/startLoading.js"></script>
+    <script src="./js/ui.js"></script>
+
+
+    <script src="./node_modules/flowbite/dist/flowbite.min.js"></script>
 </body>
 
 </html>
