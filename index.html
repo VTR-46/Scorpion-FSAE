@@ -49,7 +49,7 @@
     <main>
         <section id="homeSection">
             <div class="video-sticky-wrapper">
-                <video id="scrollVideo" preload="metadata" playsinline muted>
+<video id="scrollVideo" preload="auto" playsinline muted>
                     <source src="./img/Scorpion/V-opt.mp4" type="video/mp4">
                 </video>
                 <div id="videoDim"></div>
@@ -63,40 +63,42 @@
                         Carregando...
                     </span>
                 </div>
-                <div id="txtImgHome">
+<div id="txtImgHome">
                     <h1>SCORPION FSAE</h1>
                     <p>O Desafio nos move!</p>
                 </div>
+</div>
+            <!-- Ponto de snap no meio (após 1 scroll) para o vídeo rolar em 2 gestos -->
+            <div class="homeSection-snap" aria-hidden="true"></div>
+        </section>
 
-                <!-- homeSection2 como overlay animado que entra por cima do vídeo no final -->
-                <section id="homeSection2" aria-hidden="true">
-                    <div id="section-a">
-                        <h2>Iniciantes hoje, referencia amanhã</h2>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam nihil accusantium saepe,
-                            quidem quis
-                            voluptatum officia possimus rem quam enim in ipsa expedita magni hic. Voluptate dolorem
-                            eaque
-                            doloremque
-                            unde!</p>
-                        <div id="homeSection2Bt">
-                            <button class="p1-bnt">
-                                VEJA A EQUIPE
-                            </button>
-                            <button class="p2-bnt">
-                                APOIE A SCORPION
-                            </button>
-                        </div>
-                    </div>
-                    <div>
-                        <img src="./img/Scorpion/LogoOriginalCores.png" alt="">
-                    </div>
-                </section>
+        <!-- homeSection2 como seção completa após o vídeo (1 scroll leva até ela) -->
+        <section id="homeSection2">
+            <div id="section-a">
+                <h2>Iniciantes hoje, referencia amanhã</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam nihil accusantium saepe,
+                    quidem quis
+                    voluptatum officia possimus rem quam enim in ipsa expedita magni hic. Voluptate dolorem
+                    eaque
+                    doloremque
+                    unde!</p>
+                <div id="homeSection2Bt">
+                    <button class="p1-bnt">
+                        VEJA A EQUIPE
+                    </button>
+                    <button class="p2-bnt">
+                        APOIE A SCORPION
+                    </button>
+                </div>
+            </div>
+            <div>
+                <img src="./img/Scorpion/LogoOriginalCores.png" alt="">
             </div>
         </section>
 
         <section id="homeSection3">
             <div class="video-sticky-wrapper-3">
-                <video id="scrollVideo3" preload="metadata" playsinline muted>
+<video id="scrollVideo3" preload="auto" playsinline muted>
                     <source src="./img/Scorpion/ScorpionCarsLR-opt.mp4" type="video/mp4">
                 </video>
                 <div id="videoDim3"></div>
@@ -118,8 +120,10 @@
                     <div>
                         <img src="./img/Scorpion/ScorpionBannerI.png" alt="">
                     </div>
-                </div>
+</div>
             </div>
+            <!-- Ponto de snap no meio da homeSection3 (após 1 scroll) -->
+            <div class="homeSection3-snap" aria-hidden="true"></div>
         </section>
         <section id="homeSection4" aria-hidden="true">
             <div id="section-a">

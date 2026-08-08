@@ -12,15 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoDim3 = document.getElementById('videoDim3');
     const homeSection3Content = document.getElementById('homeSection3Content');
 
-    if (!section || !video) return;
+if (!section || !video) return;
 
-    // Respeita preferência de movimento reduzido
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        video.pause();
-        const loader = document.getElementById('videoLoader');
-        if (loader) loader.style.display = 'none';
-        return;
-    }
+    // NOTE: não fazemos return antecipado por prefers-reduced-motion,
+    // pois o site inteiro é construído em torno do vídeo controlado pelo scroll.
+    // Em vez disso, apenas respeitamos `scroll-behavior: auto` via CSS.
 
     let videoReady = false;
     let ticking = false;
@@ -54,6 +50,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+// Congela o vídeo no primeiro frame e garante que ele está pausado.
+    // Dá um play instantâneo e pausa em seguida para forçar o render do
+    // primeiro frame (alguns navegadores não pintam nada no preload="metadata").
+    function freezeVideo(v, updateFn) {
+        if (!v) return;
+        v.muted = true;
+        v.playsInline = true;
+        const apply = () => {
+            const playPromise = v.play();
+            if (playPromise && playPromise.then) {
+                playPromise.then(() => {
+                    v.pause();
+                    try { v.currentTime = 0; } catch (e) { /* ignora */ }
+                    if (updateFn) updateFn();
+                }).catch(() => {
+                    // Autoplay bloqueado ou já pausado — só faz seek
+                    try { v.currentTime = 0; } catch (e) { /* ignora */ }
+                    if (updateFn) updateFn();
+                });
+            } else {
+                try { v.currentTime = 0; } catch (e) { /* ignora */ }
+                if (updateFn) updateFn();
+            }
+        };
+        if (v.readyState >= 1) {
+            apply();
+        } else {
+            v.addEventListener('loadedmetadata', apply, { once: true });
+            v.addEventListener('canplay', apply, { once: true });
+            // Fallback: tenta carregar
+            v.load();
+        }
+    }
+
     // Habilita controle assim que os metadados estiverem disponíveis
     function enableScrollControl() {
         if (videoReady) return;
@@ -65,19 +95,16 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => loader.style.display = 'none', 500);
         }
 
-        // Congela o primeiro frame sem dar play
-        video.currentTime = 0;
-        updateVideoTime();
+        freezeVideo(video, updateVideoTime);
     }
 
-    // Ativa com loadedmetadata (mais rápido que canplaythrough)
+    // Ativa com loadedmetadata ou canplay (mais robusto)
     if (video.readyState >= 1) {
         enableScrollControl();
     } else {
         video.addEventListener('loadedmetadata', enableScrollControl, { once: true });
+        video.addEventListener('canplay', enableScrollControl, { once: true });
     }
-
-    // Remove o .load() forçado — com preload="metadata" já é suficiente
 
     // Timeout de segurança reduzido (5s)
     setTimeout(() => {
@@ -85,18 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 5000);
 
     // ===== homeSection3: inicialização do vídeo =====
-    if (video3) {
-        // Congela no primeiro frame assim que os metadados carregarem
-        if (video3.readyState >= 1) {
-            video3.currentTime = 0;
-            updateSection3();
-        } else {
-            video3.addEventListener('loadedmetadata', () => {
-                video3.currentTime = 0;
-                updateSection3();
-            }, { once: true });
-        }
-    }
+    freezeVideo(video3, updateSection3);
 
     // Mostra ou esconde header + texto conforme o progresso do scroll
     //  function setOverlayVisible(visible) {
@@ -112,10 +128,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!videoReady || !video.duration) return;
 
-        const rect = section.getBoundingClientRect();
+const rect = section.getBoundingClientRect();
         const sectionHeight = section.offsetHeight;
-        const viewportHeight = window.innerHeight;
-        const scrollable = sectionHeight - viewportHeight;
+        // Mapeia o progresso sobre a ALTURA TOTAL da seção (200vh = 2 scrolls),
+        // para que o vídeo toque por completo nos 2 gestos de scroll
+        // e termine exatamente quando a homeSection2 entra.
+        const scrollable = sectionHeight;
         const scrolled = Math.max(0, -rect.top);
         const rawProgress = Math.min(1, Math.max(0, scrolled / scrollable));
 
@@ -124,67 +142,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const targetTime = progress * video.duration;
 
-        // Só faz seek se a diferença for significativa (evita seeks desnecessários)
+// Só faz seek se a diferença for significativa (evita seeks desnecessários)
         if (Math.abs(targetTime - video.currentTime) > seekThreshold && targetTime !== lastTime) {
             lastTime = targetTime;
-            video.currentTime = targetTime;
+            // fastSeek (busca aproximada) é MUITO mais rápido para scrubbing
+            // e resolve o lag ao rolar; fallback para currentTime quando não disponível
+            if (typeof video.fastSeek === 'function') {
+                video.fastSeek(targetTime);
+            } else {
+                video.currentTime = targetTime;
+            }
         }
 
-        // Overlay de escurecimento: começa escuro (0.45) e clareia até 0 conforme o scroll avança
+// Overlay de escurecimento: começa escuro (0.45) e clareia até 0 conforme o scroll avança
         if (videoDim) {
             const dimOpacity = Math.max(0, 0.45 * (1 - progress * 1.4));
             videoDim.style.opacity = dimOpacity.toFixed(3);
         }
 
-        // homeSection2 com FADE GRADUAL conforme o usuário rola
-        // fade começa em 72% e termina em 100% do progresso do vídeo
-        if (homeSection2) {
-            const fadeStart = 0.72;
-            const fadeEnd = 1.0;
-            const fadeProgress = Math.min(1, Math.max(0, (progress - fadeStart) / (fadeEnd - fadeStart)));
-
-            // Opacidade gradual (0 → 1)
-            homeSection2.style.opacity = fadeProgress.toFixed(3);
-
-            // Leve zoom acompanhando o fade (0.94x → 1x)
-            homeSection2.style.transform = `scale(${(0.94 + 0.06 * fadeProgress).toFixed(3)})`;
-
-            // Desfoque que some conforme o fade avança
-            homeSection2.style.filter = `blur(${(10 * (1 - fadeProgress)).toFixed(2)}px)`;
-
-            // Habilita interação (botões) quando já estiver bem visível
-            const interactive = fadeProgress > 0.5;
-            homeSection2.style.pointerEvents = interactive ? 'auto' : 'none';
-            homeSection2.setAttribute('aria-hidden', interactive ? 'false' : 'true');
-
-            // Esconde o texto principal para dar lugar ao overlay durante o fade
-            if (txtImgHome) txtImgHome.classList.toggle('text-hidden', fadeProgress > 0.05);
+// homeSection2 é uma seção normal — apenas esconde o texto do vídeo
+        // quando o scroll se aproxima do fim da homeSection.
+        if (homeSection2 && txtImgHome) {
+            txtImgHome.classList.toggle('text-hidden', progress > 0.72);
         }
     }
 
-    // ===== homeSection3: vídeo de fundo controlado pelo scroll =====
+// ===== homeSection3: vídeo de fundo controlado pelo scroll (2 gestos) =====
+    // Altura da seção = 200vh (2 gestos). padding: 5rem 1.5rem vem do CSS global.
     function updateSection3() {
         if (!section3 || !video3 || !video3.duration) return;
 
         const rect3 = section3.getBoundingClientRect();
         const section3Height = section3.offsetHeight;
+        // Mapeia o progresso sobre a ALTURA TOTAL da seção (200vh = 2 scrolls),
+        // para que o vídeo toque por completo nos 2 gestos e chegue à homeSection4.
         const scrolled3 = Math.max(0, -rect3.top);
-        const scrollable3 = section3Height - window.innerHeight;
+        const scrollable3 = section3Height;
         const p3 = Math.min(1, Math.max(0, scrolled3 / scrollable3));
 
-        // --- Vídeo: Fase 1 (0→0.35): 0s→5s | Fase 2 (0.35→0.75): trava em 5s | Fase 3 (0.75→1): 5s→10s ---
-        // O conteúdo fica visível por um longo trecho (0.35→0.75 = 40% do scroll)
-        let video3Time;
-        if (p3 < 0.35) {
-            // Avança 0 → 5s na primeira parte do scroll
-            video3Time = (p3 / 0.35) * 5;
-        } else if (p3 < 0.75) {
-            // Mantém em 5s enquanto o conteúdo aparece e permanece
-            video3Time = 5;
-        } else {
-            // Continua de 5s → 10s no restante
-            video3Time = 5 + ((p3 - 0.75) / 0.25) * 5;
-        }
+        // --- Vídeo: avança do início ao fim nos 2 gestos ---
+        let video3Time = p3 * video3.duration;
 
         // Faz seek apenas quando a diferença é relevante (0.08s) e usa fastSeek
         // quando disponível — busca aproximada é muito mais rápida para scrubbing
@@ -196,19 +193,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // --- Conteúdo: surge em fade entre 0.35 e 0.45, some entre 0.75 e 0.85 ---
-        // O conteúdo fica 100% visível de 0.45 até 0.75 (30% do scroll — bem mais tempo)
+// --- Conteúdo: aparece conforme o scroll da homeSection3 avança ---
         if (homeSection3Content) {
             let contentOpacity = 0;
-            if (p3 >= 0.35 && p3 < 0.45) {
-                // Aparece gradualmente (10% do scroll)
-                contentOpacity = (p3 - 0.35) / 0.10;
-            } else if (p3 >= 0.45 && p3 < 0.75) {
-                // Permanece totalmente visível (30% do scroll)
+
+            if (p3 >= 0.45 && p3 < 0.55) {
+                contentOpacity = (p3 - 0.45) / 0.10;
+            } else if (p3 >= 0.55 && p3 < 0.85) {
                 contentOpacity = 1;
-            } else if (p3 >= 0.75 && p3 < 0.85) {
-                // Some gradualmente (10% do scroll)
-                contentOpacity = 1 - (p3 - 0.75) / 0.10;
+            } else if (p3 >= 0.85 && p3 < 0.95) {
+                contentOpacity = 1 - (p3 - 0.85) / 0.10;
             }
             contentOpacity = Math.min(1, Math.max(0, contentOpacity));
 
@@ -218,20 +212,17 @@ document.addEventListener('DOMContentLoaded', () => {
             homeSection3Content.setAttribute('aria-hidden', contentOpacity > 0.5 ? 'false' : 'true');
         }
 
-        // --- Dim: clareia na fase 1 e re-escurece na fase 3 ---
+        // --- Dim: escuro no início, clareia e re-escurece levemente no fim ---
         if (videoDim3) {
             let dim3 = 0.45;
-            if (p3 < 0.35) {
-                // Clareia enquanto o vídeo avança na fase 1
-                dim3 = 0.45 * (1 - p3 / 0.35);
-            } else if (p3 < 0.75) {
-                // Mantém claro enquanto o conteúdo está visível
-                dim3 = 0;
+            if (p3 < 0.5) {
+                // Clareia na primeira metade (1º scroll)
+                dim3 = 0.45 * (1 - p3);
             } else {
-                // Re-escurece na fase 3
-                dim3 = ((p3 - 0.75) / 0.25) * 0.45;
+                // Re-escurece levemente na segunda metade (2º scroll)
+                dim3 = 0.45 * (p3 - 0.5) * 1.2;
             }
-            videoDim3.style.opacity = dim3.toFixed(3);
+            videoDim3.style.opacity = Math.min(0.45, Math.max(0, dim3)).toFixed(3);
         }
     }
 
@@ -256,9 +247,131 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+window.addEventListener('resize', () => renderScrollEffects());
+
+    // ===== LISTENER DE SCROLL PRINCIPAL =====
+    // (crítico — sem isso o vídeo nunca é atualizado durante o scroll)
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', () => renderScrollEffects());
 
     // Garante que o header aparece quando a página carrega no topo
     updateHeader(window.scrollY);
+
+    // ===== SNAP AUTOMÁTICO ENTRE SEÇÕES =====
+    // Cada gesto de scroll avança/sai automaticamente até o próximo "ponto de parada"
+    // (borda de cada seção + ponto do meio dos vídeos de 200vh), sem ficar
+    // parado entre duas seções diferentes.
+    const snapTargets = [];
+    let snapListLocked = false;
+
+    function buildSnapTargets() {
+        snapTargets.length = 0;
+        const vh = window.innerHeight;
+
+        const push = (offsetY) => {
+            const y = Math.max(0, Math.min(document.documentElement.scrollHeight - window.innerHeight, offsetY));
+            if (snapTargets.length === 0 || snapTargets[snapTargets.length - 1] !== y) {
+                snapTargets.push(Math.round(y));
+            }
+        };
+
+        // homeSection: topo (0), meio (100vh) e fim (200vh)
+        push(0);
+        if (section) {
+            push(section.offsetTop);                  // topo = 0
+            push(section.offsetTop + vh);             // ponto do meio
+            push(section.offsetTop + section.offsetHeight); // fim = início da homeSection2
+        }
+
+// homeSection2 (100vh)
+        if (homeSection2) {
+            push(homeSection2.offsetTop);
+            push(homeSection2.offsetTop + homeSection2.offsetHeight);
+        }
+
+        // homeSection3: topo, meio (100vh) e fim (início da homeSection4)
+        if (section3) {
+            push(section3.offsetTop);
+            push(section3.offsetTop + vh);
+            push(section3.offsetTop + section3.offsetHeight);
+        }
+
+        // homeSection4 (fim da página)
+        if (document.getElementById('homeSection4')) {
+            push(document.getElementById('homeSection4').offsetTop);
+            push(document.documentElement.scrollHeight - window.innerHeight); // fim absoluto
+        }
+    }
+
+    function getNearestSnapIndex(currentY) {
+        let best = 0;
+        let bestDist = Infinity;
+        for (let i = 0; i < snapTargets.length; i++) {
+            const d = Math.abs(snapTargets[i] - currentY);
+            if (d < bestDist) {
+                bestDist = d;
+                best = i;
+            }
+        }
+        return best;
+    }
+
+    let wheelCooldown = false;
+    let suppressSnap = false;
+
+    function handleWheel(e) {
+        // Ignora o evento se já estamos rolando automaticamente ou em cooldown
+        if (wheelCooldown || suppressSnap) return;
+
+        // Só faz snap quando o gesto é essencialmente vertical
+        if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
+
+        const currentY = window.scrollY;
+        const currentIndex = getNearestSnapIndex(currentY);
+        const goingDown = e.deltaY > 0;
+
+        let targetIndex;
+        if (goingDown) {
+            targetIndex = currentIndex + 1;
+        } else {
+            targetIndex = currentIndex - 1;
+        }
+
+        if (targetIndex < 0 || targetIndex >= snapTargets.length) return;
+
+        const targetY = snapTargets[targetIndex];
+        const distance = Math.abs(targetY - currentY);
+
+        // Se já estiver muito perto do alvo, não faz nada
+        if (distance < 2) return;
+
+        // Só intercepta o wheel para o snap quando o gesto é forte o bastante
+        // para ir até o próximo ponto. Se o gesto é fraco, deixamos o scroll
+        // nativo continuar (evita a sensação de "travado").
+        const naturalStep = Math.abs(e.deltaY);
+        if (naturalStep < distance * 0.5) {
+            return; // deixa o scroll nativo rolar sem snap forçado
+        }
+
+        // Bloqueia novos snaps durante e logo após a rolagem automática
+        wheelCooldown = true;
+        suppressSnap = true;
+        e.preventDefault();
+
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
+
+        // Libera depois da animação terminar
+        const duration = Math.min(1000, Math.max(400, distance / 2));
+        setTimeout(() => {
+            wheelCooldown = false;
+            // Pequena margem extra para evitar que o scroll residual dispare outro snap
+            setTimeout(() => { suppressSnap = false; }, 120);
+        }, duration);
+    }
+
+    // Recalcula os pontos de snap em resize e no carregamento
+    buildSnapTargets();
+    window.addEventListener('resize', buildSnapTargets);
+
+    // O snap via wheel é aplicado apenas em telas onde o scroll vertical é o esperado
+    window.addEventListener('wheel', handleWheel, { passive: false });
 });
