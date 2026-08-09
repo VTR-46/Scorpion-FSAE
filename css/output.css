@@ -2994,7 +2994,6 @@ section#apoiadores {
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
-    margin-bottom: 1.25rem;
   }
   .team-card h3 {
     font-family: var(--font-display);
