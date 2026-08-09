@@ -12,6 +12,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoDim3 = document.getElementById('videoDim3');
     const homeSection3Content = document.getElementById('homeSection3Content');
 
+    // ===== REVEAL ON SCROLL (homeSection2 e homeSection4) =====
+    // Faz o conteúdo aparecer com fade-in suave quando entra na viewport.
+    const revealEls = document.querySelectorAll('.reveal');
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        // Respeita prefers-reduced-motion: mostra tudo imediatamente
+        revealEls.forEach(el => el.classList.add('is-visible'));
+    } else if (revealEls.length && 'IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    obs.unobserve(entry.target); // anima apenas uma vez
+                }
+            });
+        }, {
+            // Dispara quando ~15% do conteúdo entra na viewport
+            threshold: 0.15,
+            rootMargin: '0px 0px -10% 0px'
+        });
+
+        revealEls.forEach(el => revealObserver.observe(el));
+    } else {
+        // Fallback (sem IntersectionObserver): mostra tudo imediatamente
+        revealEls.forEach(el => el.classList.add('is-visible'));
+    }
+
     // ===== TEXT ROTATOR =====
     const txtRotator = document.getElementById('txtRotator');
     const phrases = txtRotator ? txtRotator.querySelectorAll('.txt-phrase') : [];
@@ -270,16 +297,19 @@ const rect = section.getBoundingClientRect();
             }
         }
 
-// --- Conteúdo: aparece conforme o scroll da homeSection3 avança ---
+// --- Conteúdo: aparece conforme o scroll da homeSection3 avança (3 gestos) ---
         if (homeSection3Content) {
             let contentOpacity = 0;
 
-            if (p3 >= 0.45 && p3 < 0.55) {
-                contentOpacity = (p3 - 0.45) / 0.10;
-            } else if (p3 >= 0.55 && p3 < 0.85) {
+            // Fade in no início do 2º scroll (~30%-37% da seção total de 300vh)
+            if (p3 >= 0.30 && p3 < 0.37) {
+                contentOpacity = (p3 - 0.30) / 0.07;
+            // Visível por ~2 scrolls (2º e 3º gestos) — 37% até 90%
+            } else if (p3 >= 0.37 && p3 < 0.90) {
                 contentOpacity = 1;
-            } else if (p3 >= 0.85 && p3 < 0.95) {
-                contentOpacity = 1 - (p3 - 0.85) / 0.10;
+            // Fade out perto do fim da seção (antes de chegar à homeSection4)
+            } else if (p3 >= 0.90 && p3 < 0.97) {
+                contentOpacity = 1 - (p3 - 0.90) / 0.07;
             }
             contentOpacity = Math.min(1, Math.max(0, contentOpacity));
 
@@ -289,15 +319,18 @@ const rect = section.getBoundingClientRect();
             homeSection3Content.setAttribute('aria-hidden', contentOpacity > 0.5 ? 'false' : 'true');
         }
 
-        // --- Dim: escuro no início, clareia e re-escurece levemente no fim ---
+        // --- Dim: escuro no início, clareia no 1º scroll e re-escurece no 3º scroll ---
         if (videoDim3) {
             let dim3 = 0.45;
-            if (p3 < 0.5) {
-                // Clareia na primeira metade (1º scroll)
-                dim3 = 0.45 * (1 - p3);
+            if (p3 < 0.33) {
+                // Clareia durante o 1º scroll (0 → 33%)
+                dim3 = 0.45 * (1 - p3 / 0.33);
+            } else if (p3 >= 0.33 && p3 < 0.67) {
+                // Permanece claro durante o 2º scroll
+                dim3 = 0;
             } else {
-                // Re-escurece levemente na segunda metade (2º scroll)
-                dim3 = 0.45 * (p3 - 0.5) * 1.2;
+                // Re-escurece levemente durante o 3º scroll (67% → 100%)
+                dim3 = 0.45 * ((p3 - 0.67) / 0.33) * 1.2;
             }
             videoDim3.style.opacity = Math.min(0.45, Math.max(0, dim3)).toFixed(3);
         }
@@ -365,11 +398,12 @@ window.addEventListener('resize', () => renderScrollEffects());
             push(homeSection2.offsetTop + homeSection2.offsetHeight);
         }
 
-        // homeSection3: topo, meio (100vh) e fim (início da homeSection4)
+        // homeSection3: topo, meio (100vh), 2/3 (200vh) e fim (início da homeSection4)
         if (section3) {
             push(section3.offsetTop);
-            push(section3.offsetTop + vh);
-            push(section3.offsetTop + section3.offsetHeight);
+            push(section3.offsetTop + vh);           // 100vh (1º scroll)
+            push(section3.offsetTop + vh * 2);       // 200vh (2º scroll)
+            push(section3.offsetTop + section3.offsetHeight); // 300vh (fim = início da homeSection4)
         }
 
         // homeSection4 (fim da página)
