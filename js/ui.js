@@ -116,22 +116,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicializa o rotator
     initTextRotator();
 
-if (!section || !video) return;
-
-    // NOTE: não fazemos return antecipado por prefers-reduced-motion,
-    // pois o site inteiro é construído em torno do vídeo controlado pelo scroll.
-    // Em vez disso, apenas respeitamos `scroll-behavior: auto` via CSS.
-
-    let videoReady = false;
-    let ticking = false;
-    let scrollRafId = 0;
-    let latestScrollY = window.scrollY;
-    let lastTime = 0;
-    let seekThreshold = 0.016; // ~1 frame a 60fps
-
     // ===== HEADER: mostra ao rolar para CIMA, esconde ao rolar para BAIXO =====
+    // Esta lógica é independente dos elementos de vídeo da home e roda em TODAS
+    // as páginas (index, equipe, patrocinio), desde que o ui.js esteja incluído.
     let lastScrollY = window.scrollY;
-    let headerTicking = false;
+    let headerRafId = 0;
 
     function updateHeader(scrollY) {
         if (!header) return;
@@ -153,6 +142,31 @@ if (!section || !video) return;
             header.classList.remove('header-hidden');
         }
     }
+
+    function onScrollHeader() {
+        if (headerRafId) return;
+        headerRafId = requestAnimationFrame(() => {
+            headerRafId = 0;
+            updateHeader(window.scrollY);
+        });
+    }
+
+    window.addEventListener('scroll', onScrollHeader, { passive: true });
+    // Garante que o header aparece quando a página carrega no topo
+    updateHeader(window.scrollY);
+
+if (!section || !video) return;
+
+    // NOTE: não fazemos return antecipado por prefers-reduced-motion,
+    // pois o site inteiro é construído em torno do vídeo controlado pelo scroll.
+    // Em vez disso, apenas respeitamos `scroll-behavior: auto` via CSS.
+
+    let videoReady = false;
+    let ticking = false;
+    let scrollRafId = 0;
+    let latestScrollY = window.scrollY;
+    let lastTime = 0;
+    let seekThreshold = 0.016; // ~1 frame a 60fps
 
 // Congela o vídeo no primeiro frame e garante que ele está pausado.
     // Dá um play instantâneo e pausa em seguida para forçar o render do
@@ -337,7 +351,6 @@ const rect = section.getBoundingClientRect();
     }
 
     function renderScrollEffects() {
-        updateHeader(latestScrollY);
         updateSection3();
         updateVideoTime();
     }
@@ -352,7 +365,6 @@ const rect = section.getBoundingClientRect();
         scrollRafId = requestAnimationFrame(() => {
             scrollRafId = 0;
             ticking = false;
-            headerTicking = false;
             renderScrollEffects();
         });
     }
@@ -362,9 +374,6 @@ window.addEventListener('resize', () => renderScrollEffects());
     // ===== LISTENER DE SCROLL PRINCIPAL =====
     // (crítico — sem isso o vídeo nunca é atualizado durante o scroll)
     window.addEventListener('scroll', onScroll, { passive: true });
-
-    // Garante que o header aparece quando a página carrega no topo
-    updateHeader(window.scrollY);
 
     // ===== SNAP AUTOMÁTICO ENTRE SEÇÕES =====
     // Cada gesto de scroll avança/sai automaticamente até o próximo "ponto de parada"
