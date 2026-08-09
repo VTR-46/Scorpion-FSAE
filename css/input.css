@@ -485,9 +485,23 @@ section {
   text-transform: uppercase;
   color: var(--white);
   text-shadow: 0 0 48px rgba(0, 179, 254, 0.45), 0 4px 24px rgba(0, 0, 0, 0.6);
+  transition: color 0.4s ease, text-shadow 0.4s ease, transform 0.3s ease, letter-spacing 0.3s ease;
+  cursor: pointer;
 }
 
-#txtImgHome p {
+#txtImgHome h1:hover {
+  color: #00b3fe;
+  text-shadow: 
+    0 0 20px rgba(0, 179, 254, 0.8),
+    0 0 40px rgba(0, 179, 254, 0.6),
+    0 0 60px rgba(0, 179, 254, 0.4),
+    0 0 80px rgba(0, 179, 254, 0.2),
+    0 4px 24px rgba(0, 0, 0, 0.6);
+  transform: scale(1.02);
+  letter-spacing: 0.12em;
+}
+
+#txtImgHome > p {
   margin-top: 0.5rem;
   font-size: clamp(1rem, 2.5vw, 1.4rem);
   font-weight: 400;
@@ -495,6 +509,82 @@ section {
   text-transform: uppercase;
   color: var(--cyan);
   text-shadow: 0 0 24px rgba(0, 179, 254, 0.5);
+}
+
+/* Text Rotator Styles */
+.txt-rotator {
+  position: relative;
+  height: auto;
+  min-height: 1.5em;
+}
+
+.txt-phrase {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%) translateY(30px);
+  opacity: 0;
+  margin: 0;
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  text-shadow: 0 0 24px rgba(0, 179, 254, 0.5);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  will-change: opacity, transform;
+}
+
+.txt-phrase.active {
+  transform: translateY(-50%) translateY(0);
+  opacity: 1;
+  z-index: 1;
+}
+
+.txt-phrase.exiting-up {
+  animation: fadeUpOut 0.5s ease forwards;
+}
+
+.txt-phrase.entering-up {
+  animation: fadeUpIn 0.5s ease forwards;
+}
+
+@keyframes fadeUpOut {
+  from {
+    opacity: 1;
+    transform: translateY(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-50%) translateY(-30px);
+  }
+}
+
+@keyframes fadeUpIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .txt-phrase {
+    transition: none;
+    animation: none !important;
+  }
+  .txt-phrase.active {
+    opacity: 1;
+    transform: translateY(-50%) translateY(0);
+  }
+  .txt-phrase:not(.active) {
+    opacity: 0;
+    transform: translateY(-50%) translateY(30px);
+  }
 }
 
 #homeSection p {

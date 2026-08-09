@@ -12,6 +12,83 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoDim3 = document.getElementById('videoDim3');
     const homeSection3Content = document.getElementById('homeSection3Content');
 
+    // ===== TEXT ROTATOR =====
+    const txtRotator = document.getElementById('txtRotator');
+    const phrases = txtRotator ? txtRotator.querySelectorAll('.txt-phrase') : [];
+    let currentPhraseIndex = 0;
+    let rotatorInterval = null;
+    const ROTATION_INTERVAL = 5000; // 5 segundos
+    const ANIMATION_DURATION = 500; // 0.5 segundos
+
+    function initTextRotator() {
+        if (!txtRotator || phrases.length === 0) return;
+
+        // Inicia com a primeira frase ativa
+        phrases[0].classList.add('active');
+
+        // Função para rotacionar as frases
+        function rotatePhrase() {
+            const currentPhrase = phrases[currentPhraseIndex];
+            const nextIndex = (currentPhraseIndex + 1) % phrases.length;
+            const nextPhrase = phrases[nextIndex];
+
+            // Anima a frase atual saindo para cima
+            currentPhrase.classList.remove('active');
+            currentPhrase.classList.add('exiting-up');
+
+            // Prepara a próxima frase (entrada de baixo)
+            nextPhrase.classList.add('entering-up');
+
+            // Após a animação de saída, limpa classes e ativa a próxima
+            setTimeout(() => {
+                currentPhrase.classList.remove('exiting-up');
+                nextPhrase.classList.remove('entering-up');
+                nextPhrase.classList.add('active');
+                currentPhraseIndex = nextIndex;
+            }, ANIMATION_DURATION);
+        }
+
+        // Inicia o intervalo
+        rotatorInterval = setInterval(rotatePhrase, ROTATION_INTERVAL);
+
+        // Pausa a rotação quando o mouse está sobre o texto
+        txtRotator.addEventListener('mouseenter', () => {
+            if (rotatorInterval) {
+                clearInterval(rotatorInterval);
+                rotatorInterval = null;
+            }
+        });
+
+        // Retoma a rotação quando o mouse sai
+        txtRotator.addEventListener('mouseleave', () => {
+            if (!rotatorInterval) {
+                rotatorInterval = setInterval(rotatePhrase, ROTATION_INTERVAL);
+            }
+        });
+
+        // Respeita prefers-reduced-motion
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (mediaQuery.matches) {
+            if (rotatorInterval) {
+                clearInterval(rotatorInterval);
+                rotatorInterval = null;
+            }
+        }
+        mediaQuery.addEventListener('change', (e) => {
+            if (e.matches) {
+                if (rotatorInterval) {
+                    clearInterval(rotatorInterval);
+                    rotatorInterval = null;
+                }
+            } else if (!rotatorInterval) {
+                rotatorInterval = setInterval(rotatePhrase, ROTATION_INTERVAL);
+            }
+        });
+    }
+
+    // Inicializa o rotator
+    initTextRotator();
+
 if (!section || !video) return;
 
     // NOTE: não fazemos return antecipado por prefers-reduced-motion,
