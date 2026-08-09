@@ -49,7 +49,7 @@
     <main>
         <section id="homeSection">
             <div class="video-sticky-wrapper">
-                <video id="scrollVideo" preload="metadata" playsinline muted>
+                <video id="scrollVideo" preload="auto" playsinline muted>
                     <source src="./img/Scorpion/V-opt.mp4" type="video/mp4">
                 </video>
                 <div id="videoDim"></div>
@@ -67,48 +67,48 @@
                     <h1>SCORPION FSAE</h1>
                     <p>O Desafio nos move!</p>
                 </div>
+            </div>
+            <!-- Ponto de snap no meio (após 1 scroll) para o vídeo rolar em 2 gestos -->
+            <div class="homeSection-snap" aria-hidden="true"></div>
+        </section>
 
-                <!-- homeSection2 como overlay animado que entra por cima do vídeo no final -->
-                <section id="homeSection2" aria-hidden="true">
-                    <div id="section-a">
-                        <h2>Iniciantes hoje, referencia amanhã</h2>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam nihil accusantium saepe,
-                            quidem quis
-                            voluptatum officia possimus rem quam enim in ipsa expedita magni hic. Voluptate dolorem
-                            eaque
-                            doloremque
-                            unde!</p>
-                        <div id="homeSection2Bt">
-                            <button class="p1-bnt">
-                                VEJA A EQUIPE
-                            </button>
-                            <button class="p2-bnt">
-                                APOIE A SCORPION
-                            </button>
-                        </div>
-                    </div>
-                    <div>
-                        <img src="./img/Scorpion/LogoOriginalCores.png" alt="">
-                    </div>
-                </section>
+        <!-- homeSection2 como seção completa após o vídeo (1 scroll leva até ela) -->
+        <section id="homeSection2">
+            <div id="section-a">
+                <h2>Iniciantes hoje, referencia amanhã</h2>
+                <p>A Scorpion FSAE nasceu para transformar estudantes do IFSP Araraquara em engenheiros de elite,
+                    prontos para a Fórmula SAE.</p>
+                <br>
+                <p>Somos uma equipe iniciante no ciclo de design, e vemos esse
+                    começo como ponto de partida: aprender, evoluir e levar a teoria para a prática em um ambiente de
+                    alta performance. Nossa jornada vai além das pistas, formamos talentos e abrimos espaço para
+                    parcerias de impacto social e educacional genuíno. Cada parceria é uma convergência de propósitos:
+                    começamos como iniciantes hoje para construir, juntos, uma referência amanhã.</p>
+                <div id="homeSection2Bt">
+                    <button class="p1-bnt">
+                        VEJA A EQUIPE
+                    </button>
+                    <button class="p2-bnt">
+                        APOIE A SCORPION
+                    </button>
+                </div>
+            </div>
+            <div>
+                <img src="./img/Scorpion/LogoOriginalCores.png" alt="">
             </div>
         </section>
 
         <section id="homeSection3">
             <div class="video-sticky-wrapper-3">
-                <video id="scrollVideo3" preload="metadata" playsinline muted>
+                <video id="scrollVideo3" preload="auto" playsinline muted>
                     <source src="./img/Scorpion/ScorpionCarsLR-opt.mp4" type="video/mp4">
                 </video>
                 <div id="videoDim3"></div>
                 <div id="homeSection3Content" aria-hidden="true">
                     <div id="section-a">
                         <h2>CONHEÇA UM POUCO DA HISTORIA DA EQUIPE!</h2>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam nihil accusantium saepe,
-                            quidem quis
-                            voluptatum officia possimus rem quam enim in ipsa expedita magni hic. Voluptate dolorem
-                            eaque
-                            doloremque
-                            unde!</p>
+                        <p></p>
+                        <br>
                         <div class="section-btns">
                             <button class="p1-bnt">
                                 SOBRE A EQUIPE
@@ -120,21 +120,18 @@
                     </div>
                 </div>
             </div>
+            <!-- Ponto de snap no meio da homeSection3 (após 1 scroll) -->
+            <div class="homeSection3-snap" aria-hidden="true"></div>
         </section>
         <section id="homeSection4" aria-hidden="true">
             <div id="section-a">
                 <h2>VEJA AQUELES QUE ACELERAM JUNTO COM A SCORPION</h2>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam nihil accusantium saepe,
-                    quidem quis
-                    voluptatum officia possimus rem quam enim in ipsa expedita magni hic. Voluptate dolorem
-                    eaque
-                    doloremque
-                    unde!</p>
+                <p>Confira nossos patrocinadores e apoiadores, que ajudam a Scorpion evoluir!</p>
                 <div id="homeSection2Bt">
                     <a href="./html/patrocinio.html"><button class="p1-bnt">
-                        PATROCINADORES
-                    </button></a>
-                    
+                            PATROCINADORES
+                        </button></a>
+
                 </div>
             </div>
         </section>

@@ -60,6 +60,14 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 90px;
+  /* Snap entre as seções é controlado via JS (ui.js) para não travar
+     entre duas seções diferentes durante o scroll automático. */
+  scroll-snap-type: none;
+}
+
+html,
+body {
+  overscroll-behavior-y: none;
 }
 
 body {
@@ -229,9 +237,23 @@ section {
 
 #homeSection {
   position: relative;
-  height: 400vh;           /* 100vh video + 300vh de scroll - mais espaco = video mais lento */
+  height: 200vh;           /* 100vh video + 100vh de scroll suave */
   padding: 0;
+  scroll-snap-align: start;
   /* border-bottom: 2px solid var(--yellow); */
+}
+
+/* Ponto de snap no meio da seção: separa o scroll em 2 gestos.
+   Como #homeSection tem 200vh, o snap em 100vh cria 2 pontos:
+   scroll 1 → 100vh (vídeo ~50%), scroll 2 → 200vh (vídeo completo). */
+.homeSection-snap {
+  position: absolute;
+  top: 100vh;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  scroll-snap-align: start;
+  pointer-events: none;
 }
 
 .video-sticky-wrapper {
@@ -342,32 +364,18 @@ section {
 }
 
 
-/* homeSection2 como overlay com FADE GRADUAL controlado pelo scroll (js/ui.js) */
+/* homeSection2 é uma seção normal após o vídeo da homeSection.
+   Sem overlay/transição — aparece como uma seção comum. */
 #homeSection2 {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
+  min-height: 100vh;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 3rem;
-  padding: 2rem;
+  padding: 5rem 2rem;
   background: black;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  opacity: 0;                  /* JS controla o fade conforme o scroll */
-  transform: scale(0.94);      /* JS controla o zoom conforme o scroll */
-  filter: blur(10px);          /* JS controla o desfoque conforme o scroll */
-  pointer-events: none;        /* JS habilita quando estiver visível */
-}
-
-/* Mantido por compatibilidade (o JS usa estilos inline) */
-#homeSection2.show {
-  opacity: 1;
-  transform: scale(1);
-  filter: blur(0);
-  pointer-events: auto;
+  scroll-snap-align: start;
 }
 
 #homeSection2 h2 {
@@ -448,9 +456,21 @@ section {
 
 #homeSection3 {
   position: relative;
-  height: 400vh;           /* 100vh video + 300vh de scroll - mais espaco = video mais lento */
+  height: 200vh;           /* 100vh video + 100vh de scroll = 2 gestos */
   padding: 0;
   background-color: #111129;
+  scroll-snap-align: start;
+}
+
+/* Ponto de snap no meio da homeSection3 (após 1 scroll) */
+.homeSection3-snap {
+  position: absolute;
+  top: 100vh;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  scroll-snap-align: start;
+  pointer-events: none;
 }
 
 /* Wrapper sticky do vídeo da homeSection3 */
@@ -526,6 +546,7 @@ section {
   align-items: center;
   justify-content: center;
   text-align: center;
+  scroll-snap-align: start;
 }
 
 #homeSection4 > div {

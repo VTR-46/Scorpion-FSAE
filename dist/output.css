@@ -2297,6 +2297,10 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 90px;
+  scroll-snap-type: none;
+}
+html, body {
+  overscroll-behavior-y: none;
 }
 body {
   background: var(--bg-section);
@@ -2437,8 +2441,18 @@ section {
 }
 #homeSection {
   position: relative;
-  height: 400vh;
+  height: 200vh;
   padding: 0;
+  scroll-snap-align: start;
+}
+.homeSection-snap {
+  position: absolute;
+  top: 100vh;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  scroll-snap-align: start;
+  pointer-events: none;
 }
 .video-sticky-wrapper {
   position: sticky;
@@ -2523,28 +2537,15 @@ section {
   z-index: 0;
 }
 #homeSection2 {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
+  min-height: 100vh;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 3rem;
-  padding: 2rem;
+  padding: 5rem 2rem;
   background: black;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  opacity: 0;
-  transform: scale(0.94);
-  filter: blur(10px);
-  pointer-events: none;
-}
-#homeSection2.show {
-  opacity: 1;
-  transform: scale(1);
-  filter: blur(0);
-  pointer-events: auto;
+  scroll-snap-align: start;
 }
 #homeSection2 h2 {
   font-style: italic;
@@ -2608,9 +2609,19 @@ section {
 }
 #homeSection3 {
   position: relative;
-  height: 400vh;
+  height: 200vh;
   padding: 0;
   background-color: #111129;
+  scroll-snap-align: start;
+}
+.homeSection3-snap {
+  position: absolute;
+  top: 100vh;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  scroll-snap-align: start;
+  pointer-events: none;
 }
 .video-sticky-wrapper-3 {
   position: sticky;
@@ -2674,6 +2685,7 @@ section {
   align-items: center;
   justify-content: center;
   text-align: center;
+  scroll-snap-align: start;
 }
 #homeSection4 > div {
   width: 100%;
