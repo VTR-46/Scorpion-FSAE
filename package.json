@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "build": "npx @tailwindcss/cli -i ./css/input.css -o ./dist/output.css --minify",
+    "dev": "npx @tailwindcss/cli -i ./css/input.css -o ./dist/output.css --watch"
+  },
   "dependencies": {
     "@tailwindcss/cli": "^4.3.0",
     "flowbite": "^4.0.2",

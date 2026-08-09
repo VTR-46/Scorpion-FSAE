@@ -1,1 +1,145 @@
 @import "tailwindcss";
+
+/* ========================================
+   CONTATO CARD - Estilos customizados
+   ======================================== */
+.contato-card {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0;
+  width: 100%;
+  max-width: 460px;
+  min-height: 150px;
+  margin: 0 auto;
+  background-color: rgba(28, 28, 28, 0.55);
+  padding: 0;
+  border-radius: 8px;
+  border: 2px solid var(--cyan);
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(0, 179, 254, 0.10);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.contato-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 36px rgba(0, 179, 254, 0.22);
+  border-color: var(--white);
+}
+
+.contato-card .contato-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 110px;
+  flex-shrink: 0;
+  background-color: var(--cyan);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(0, 0, 0, 0.10) 100%);
+}
+
+.contato-card .contato-icon {
+  width: 52px;
+  height: 52px;
+  fill: #0e1c37;
+  stroke: #0e1c37;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+}
+
+.contato-card .contato-card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 1.25rem 1.5rem;
+  flex: 1 1 auto;
+  text-align: left;
+}
+
+.contato-card .contato-label {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin: 0;
+}
+
+.contato-card .contato-card-divider {
+  height: 1px;
+  width: 48px;
+  background-color: var(--cyan);
+  opacity: 0.7;
+  margin: 0.15rem 0 0.35rem 0;
+}
+
+.contato-card .contato-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.contato-card h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.1;
+  color: var(--white);
+  margin: 0;
+}
+
+.contato-card h3 {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted);
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.contato-card .contato-subtitle {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--white);
+  margin: 0.35rem 0 0 0;
+  letter-spacing: 0.02em;
+}
+
+.contato-card .contato-subtitle::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--cyan);
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  box-shadow: 0 0 8px rgba(0, 179, 254, 0.8);
+}
+
+.contato-card img {
+  fill: #00b3fe;
+  stroke: #00b3fe;
+}
+
+@media (max-width: 480px) {
+  .contato-card {
+    max-width: 100%;
+  }
+  .contato-card .contato-icon-wrap {
+    width: 86px;
+  }
+  .contato-card .contato-icon {
+    width: 40px;
+    height: 40px;
+  }
+  .contato-card h2 {
+    font-size: 1.25rem;
+  }
+  .contato-card .contato-card-body {
+    padding: 1rem 1.1rem;
+  }
+}

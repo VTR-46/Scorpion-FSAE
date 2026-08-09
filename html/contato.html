@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scorpion FSAE</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:ital,wght@0,400;0,500;0,600;0,700;1,700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <link rel="shortcut icon" href="../img/Scorpion/LogoOriginalCores.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="../dist/output.css">
+</head>
+
+<body>
+    <br>
+    <header class="main-tool-bar">
+        <nav>
+            <a href="../index.html" class="logo">
+                <img src="../img/Scorpion/SCORPION FSAE LOGO FULL 1.png" alt="Scorpion FSAE">
+                <span class="logo-text">Scorpion <em>FSAE</em></span>
+            </a>
+
+            <ul>
+                <li><a href="./equipe.html">Equipe</a></li>
+                <li><a href="./patrocinio.html">Patrocinadores</a></li>
+                <li><a href="#competicao">Competição</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="equipe">
+        <div class="section-header">
+            <h1>Contato</h1>
+            <p class="section-subtitle">Converse conosco</p>
+        </div>
+    </section>
+
+    <section id="contato">
+        <div class="contato-card">
+            <div class="contato-icon-wrap">
+                <img src="../img/Icons/iconmonstr-whatsapp-1.svg" alt="WhatsApp Icon" class="contato-icon">
+            </div>
+            <div class="contato-card-body">
+                <h1 class="contato-label">WhatsApp</h1>
+                <div class="contato-card-divider"></div>
+                <div class="contato-card-info">
+                    <h2>Victor Ricardo</h2>
+                    <h3>Coord. M&N</h3>
+                    <p class="contato-subtitle">(16) 99609-6284</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="contato-card">
+            <div class="contato-icon-wrap">
+                <img src="../img/Icons/iconmonstr-whatsapp-1.svg" alt="WhatsApp Icon" class="contato-icon">
+            </div>
+            <div class="contato-card-body">
+                <h1 class="contato-label">WhatsApp</h1>
+                <div class="contato-card-divider"></div>
+                <div class="contato-card-info">
+                    <h2>Caroline Rocha</h2>
+                    <h3>Capitã</h3>
+                    <p class="contato-subtitle">(16) 99609-6284</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="contato-card">
+            <div class="contato-icon-wrap">
+                <img src="../img/Icons/iconmonstr-email-4.svg" alt="Email Icon" class="contato-icon">
+            </div>
+            <div class="contato-card-body">
+                <h1 class="contato-label">Email</h1>
+                <div class="contato-card-divider"></div>
+                <div class="contato-card-info">
+                    <h2>Scorpion</h2>
+                    <!-- <h3>Capitã</h3> -->
+                    <p class="contato-subtitle">scorpionfsae@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="formulario">
+        <div class="section-header">
+            <h1>Formulário de Contato</h1>
+            <p class="section-subtitle">Envie sua mensagem diretamente para a equipe</p>
+        </div>
+
+        <div class="formulario-container">
+            <form action="https://formspree.io/f/mnqvydqv" method="POST" class="formulario-form">
+                <div class="form-group">
+                    <label for="nome" class="form-label">Nome</label>
+                    <input type="text" id="nome" name="nome" class="form-input" placeholder="Seu nome completo" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" name="_replyto" class="form-input" placeholder="seu@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="assunto" class="form-label">Assunto</label>
+                    <select id="assunto" name="assunto" class="form-input form-select" required>
+                        <option value="" disabled selected>Selecione um assunto</option>
+                        <option value="patrocinio">Patrocínio / Parceria</option>
+                        <option value="duvidas">Dúvidas Gerais</option>
+                        <option value="imprensa">Imprensa / Mídia</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="mensagem" class="form-label">Mensagem</label>
+                    <textarea id="mensagem" name="mensagem" class="form-input form-textarea" rows="6" placeholder="Escreva sua mensagem aqui..." required></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="p1-bnt">ENVIAR MENSAGEM</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <script src="../js/ui.js"></script>
+</body>
+
+</html>
