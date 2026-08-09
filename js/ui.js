@@ -12,22 +12,115 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoDim3 = document.getElementById('videoDim3');
     const homeSection3Content = document.getElementById('homeSection3Content');
 
-if (!section || !video) return;
+    // ===== REVEAL ON SCROLL (homeSection2 e homeSection4) =====
+    // Faz o conteúdo aparecer com fade-in suave quando entra na viewport.
+    const revealEls = document.querySelectorAll('.reveal');
 
-    // NOTE: não fazemos return antecipado por prefers-reduced-motion,
-    // pois o site inteiro é construído em torno do vídeo controlado pelo scroll.
-    // Em vez disso, apenas respeitamos `scroll-behavior: auto` via CSS.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        // Respeita prefers-reduced-motion: mostra tudo imediatamente
+        revealEls.forEach(el => el.classList.add('is-visible'));
+    } else if (revealEls.length && 'IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    obs.unobserve(entry.target); // anima apenas uma vez
+                }
+            });
+        }, {
+            // Dispara quando ~15% do conteúdo entra na viewport
+            threshold: 0.15,
+            rootMargin: '0px 0px -10% 0px'
+        });
 
-    let videoReady = false;
-    let ticking = false;
-    let scrollRafId = 0;
-    let latestScrollY = window.scrollY;
-    let lastTime = 0;
-    let seekThreshold = 0.016; // ~1 frame a 60fps
+        revealEls.forEach(el => revealObserver.observe(el));
+    } else {
+        // Fallback (sem IntersectionObserver): mostra tudo imediatamente
+        revealEls.forEach(el => el.classList.add('is-visible'));
+    }
+
+    // ===== TEXT ROTATOR =====
+    const txtRotator = document.getElementById('txtRotator');
+    const phrases = txtRotator ? txtRotator.querySelectorAll('.txt-phrase') : [];
+    let currentPhraseIndex = 0;
+    let rotatorInterval = null;
+    const ROTATION_INTERVAL = 5000; // 5 segundos
+    const ANIMATION_DURATION = 500; // 0.5 segundos
+
+    function initTextRotator() {
+        if (!txtRotator || phrases.length === 0) return;
+
+        // Inicia com a primeira frase ativa
+        phrases[0].classList.add('active');
+
+        // Função para rotacionar as frases
+        function rotatePhrase() {
+            const currentPhrase = phrases[currentPhraseIndex];
+            const nextIndex = (currentPhraseIndex + 1) % phrases.length;
+            const nextPhrase = phrases[nextIndex];
+
+            // Anima a frase atual saindo para cima
+            currentPhrase.classList.remove('active');
+            currentPhrase.classList.add('exiting-up');
+
+            // Prepara a próxima frase (entrada de baixo)
+            nextPhrase.classList.add('entering-up');
+
+            // Após a animação de saída, limpa classes e ativa a próxima
+            setTimeout(() => {
+                currentPhrase.classList.remove('exiting-up');
+                nextPhrase.classList.remove('entering-up');
+                nextPhrase.classList.add('active');
+                currentPhraseIndex = nextIndex;
+            }, ANIMATION_DURATION);
+        }
+
+        // Inicia o intervalo
+        rotatorInterval = setInterval(rotatePhrase, ROTATION_INTERVAL);
+
+        // Pausa a rotação quando o mouse está sobre o texto
+        txtRotator.addEventListener('mouseenter', () => {
+            if (rotatorInterval) {
+                clearInterval(rotatorInterval);
+                rotatorInterval = null;
+            }
+        });
+
+        // Retoma a rotação quando o mouse sai
+        txtRotator.addEventListener('mouseleave', () => {
+            if (!rotatorInterval) {
+                rotatorInterval = setInterval(rotatePhrase, ROTATION_INTERVAL);
+            }
+        });
+
+        // Respeita prefers-reduced-motion
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (mediaQuery.matches) {
+            if (rotatorInterval) {
+                clearInterval(rotatorInterval);
+                rotatorInterval = null;
+            }
+        }
+        mediaQuery.addEventListener('change', (e) => {
+            if (e.matches) {
+                if (rotatorInterval) {
+                    clearInterval(rotatorInterval);
+                    rotatorInterval = null;
+                }
+            } else if (!rotatorInterval) {
+                rotatorInterval = setInterval(rotatePhrase, ROTATION_INTERVAL);
+            }
+        });
+    }
+
+    // Inicializa o rotator
+    initTextRotator();
 
     // ===== HEADER: mostra ao rolar para CIMA, esconde ao rolar para BAIXO =====
+    // Esta lógica é independente dos elementos de vídeo da home e roda em TODAS
+    // as páginas (index, equipe, patrocinio), desde que o ui.js esteja incluído.
     let lastScrollY = window.scrollY;
-    let headerTicking = false;
+    let headerRafId = 0;
 
     function updateHeader(scrollY) {
         if (!header) return;
@@ -49,6 +142,31 @@ if (!section || !video) return;
             header.classList.remove('header-hidden');
         }
     }
+
+    function onScrollHeader() {
+        if (headerRafId) return;
+        headerRafId = requestAnimationFrame(() => {
+            headerRafId = 0;
+            updateHeader(window.scrollY);
+        });
+    }
+
+    window.addEventListener('scroll', onScrollHeader, { passive: true });
+    // Garante que o header aparece quando a página carrega no topo
+    updateHeader(window.scrollY);
+
+if (!section || !video) return;
+
+    // NOTE: não fazemos return antecipado por prefers-reduced-motion,
+    // pois o site inteiro é construído em torno do vídeo controlado pelo scroll.
+    // Em vez disso, apenas respeitamos `scroll-behavior: auto` via CSS.
+
+    let videoReady = false;
+    let ticking = false;
+    let scrollRafId = 0;
+    let latestScrollY = window.scrollY;
+    let lastTime = 0;
+    let seekThreshold = 0.016; // ~1 frame a 60fps
 
 // Congela o vídeo no primeiro frame e garante que ele está pausado.
     // Dá um play instantâneo e pausa em seguida para forçar o render do
@@ -193,16 +311,19 @@ const rect = section.getBoundingClientRect();
             }
         }
 
-// --- Conteúdo: aparece conforme o scroll da homeSection3 avança ---
+// --- Conteúdo: aparece conforme o scroll da homeSection3 avança (3 gestos) ---
         if (homeSection3Content) {
             let contentOpacity = 0;
 
-            if (p3 >= 0.45 && p3 < 0.55) {
-                contentOpacity = (p3 - 0.45) / 0.10;
-            } else if (p3 >= 0.55 && p3 < 0.85) {
+            // Fade in no início do 2º scroll (~30%-37% da seção total de 300vh)
+            if (p3 >= 0.30 && p3 < 0.37) {
+                contentOpacity = (p3 - 0.30) / 0.07;
+            // Visível por ~2 scrolls (2º e 3º gestos) — 37% até 90%
+            } else if (p3 >= 0.37 && p3 < 0.90) {
                 contentOpacity = 1;
-            } else if (p3 >= 0.85 && p3 < 0.95) {
-                contentOpacity = 1 - (p3 - 0.85) / 0.10;
+            // Fade out perto do fim da seção (antes de chegar à homeSection4)
+            } else if (p3 >= 0.90 && p3 < 0.97) {
+                contentOpacity = 1 - (p3 - 0.90) / 0.07;
             }
             contentOpacity = Math.min(1, Math.max(0, contentOpacity));
 
@@ -212,22 +333,24 @@ const rect = section.getBoundingClientRect();
             homeSection3Content.setAttribute('aria-hidden', contentOpacity > 0.5 ? 'false' : 'true');
         }
 
-        // --- Dim: escuro no início, clareia e re-escurece levemente no fim ---
+        // --- Dim: escuro no início, clareia no 1º scroll e re-escurece no 3º scroll ---
         if (videoDim3) {
             let dim3 = 0.45;
-            if (p3 < 0.5) {
-                // Clareia na primeira metade (1º scroll)
-                dim3 = 0.45 * (1 - p3);
+            if (p3 < 0.33) {
+                // Clareia durante o 1º scroll (0 → 33%)
+                dim3 = 0.45 * (1 - p3 / 0.33);
+            } else if (p3 >= 0.33 && p3 < 0.67) {
+                // Permanece claro durante o 2º scroll
+                dim3 = 0;
             } else {
-                // Re-escurece levemente na segunda metade (2º scroll)
-                dim3 = 0.45 * (p3 - 0.5) * 1.2;
+                // Re-escurece levemente durante o 3º scroll (67% → 100%)
+                dim3 = 0.45 * ((p3 - 0.67) / 0.33) * 1.2;
             }
             videoDim3.style.opacity = Math.min(0.45, Math.max(0, dim3)).toFixed(3);
         }
     }
 
     function renderScrollEffects() {
-        updateHeader(latestScrollY);
         updateSection3();
         updateVideoTime();
     }
@@ -242,7 +365,6 @@ const rect = section.getBoundingClientRect();
         scrollRafId = requestAnimationFrame(() => {
             scrollRafId = 0;
             ticking = false;
-            headerTicking = false;
             renderScrollEffects();
         });
     }
@@ -252,9 +374,6 @@ window.addEventListener('resize', () => renderScrollEffects());
     // ===== LISTENER DE SCROLL PRINCIPAL =====
     // (crítico — sem isso o vídeo nunca é atualizado durante o scroll)
     window.addEventListener('scroll', onScroll, { passive: true });
-
-    // Garante que o header aparece quando a página carrega no topo
-    updateHeader(window.scrollY);
 
     // ===== SNAP AUTOMÁTICO ENTRE SEÇÕES =====
     // Cada gesto de scroll avança/sai automaticamente até o próximo "ponto de parada"
@@ -288,11 +407,12 @@ window.addEventListener('resize', () => renderScrollEffects());
             push(homeSection2.offsetTop + homeSection2.offsetHeight);
         }
 
-        // homeSection3: topo, meio (100vh) e fim (início da homeSection4)
+        // homeSection3: topo, meio (100vh), 2/3 (200vh) e fim (início da homeSection4)
         if (section3) {
             push(section3.offsetTop);
-            push(section3.offsetTop + vh);
-            push(section3.offsetTop + section3.offsetHeight);
+            push(section3.offsetTop + vh);           // 100vh (1º scroll)
+            push(section3.offsetTop + vh * 2);       // 200vh (2º scroll)
+            push(section3.offsetTop + section3.offsetHeight); // 300vh (fim = início da homeSection4)
         }
 
         // homeSection4 (fim da página)
