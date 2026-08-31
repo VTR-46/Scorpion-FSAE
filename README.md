@@ -39,32 +39,7 @@ Criar uma presenca digital profissional que:
 ## Estrutura do Projeto
 
 `
-Scorpion-FSAE/
-├── index.html              # Pagina principal (Home)
-├── package.json            # Configuracao npm e scripts
-├── README.md               # Esta documentacao
-├── css/
-│   ├── input.css           # Source CSS (Tailwind + custom)
-│   └── output.css          # CSS compilado (nao versionado)
-├── dist/
-│   └── output.css          # CSS final minificado para producao
-├── html/
-│   ├── equipe.html         # Pagina da equipe/membros
-│   ├── patrocinio.html     # Patrocinadores, apoiadores, competicao, sobre
-│   ├── loja.html           # Loja de produtos da equipe
-│   └── contato.html        # Contato + formulario EmailJS
-├── js/
-│   ├── ui.js               # Modulo principal (scroll, animacoes, video)
-│   ├── startLoading.js     # Tela de loading inicial (2s)
-│   ├── teamFade.js         # Fade-in por fileira da equipe
-│   └── email.js            # Integracao EmailJS
-├── img/
-│   ├── Scorpion/           # Assets da equipe (logos, banners, videos)
-│   ├── Patrocinadores/     # Logos de patrocinadores/apoiadores
-│   └── Icons/              # Icones SVG (WhatsApp, Email)
-├── src/
-│   └── input.css           # CSS fonte alternativo (contato)
-└── node_modules/           # Dependencias npm
+...
 `
 
 ---
