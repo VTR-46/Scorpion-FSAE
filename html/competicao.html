@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipe</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:ital,wght@0,400;0,500;0,600;0,700;1,700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <link rel="shortcut icon" href="../img/Scorpion/LogoOriginalCores.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="../dist/output.css">
+    <link rel="stylesheet" href="../css/output.css">
+
+    <link rel="stylesheet" href="../css/competicao.css">
+</head>
+
+<body>
+    <!-- Tela de Loading -->
+    <div id="loadingScreen">
+        <video id="loadingVideo" autoplay muted loop playsinline>
+            <source src="../img/Scorpion/ScorpionRUN-opt.mp4" type="video/mp4">
+        </video>
+        <div id="loadingBar">
+            <div id="loadingBarFill"></div>
+        </div>
+    </div>
+
+    <header class="main-tool-bar">
+        <nav>
+            <a href="../index.html" class="logo">
+                <img src="../img/Scorpion/SCORPION FSAE LOGO FULL 1.png" alt="Scorpion FSAE">
+                <span class="logo-text">Scorpion <em>FSAE</em></span>
+            </a>
+
+            <ul>
+                <li><a href="./equipe.html">Equipe</a></li>
+                <li><a href="./patrocinio.html">Patrocinadores</a></li>
+                <li><a href="#competicao">Competição</a></li>
+                <li><a href="./loja.html">Loja</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ════════════════════════════════════════════════
+         Seção Em Breve - Novo Carro (Lanterna Effect)
+         ════════════════════════════════════════════════ -->
+    <section id="em-breve-section" class="em-breve-section">
+        <div class="em-breve-bg"></div>
+        <div class="em-breve-overlay"></div>
+        <div class="em-breve-content">
+            <h1 class="fsae-title fsae-fade" data-delay="1">EM BREVE...</h1>
+            <p class="fsae-lead fsae-fade" data-delay="2" style="max-width: 800px; margin: 1rem auto 0; text-align: center;">
+                Em breve iremos revelar novos render do carro junto do seu nome escolhido pela comunidade.
+            </p>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════
+         Seção informativa – Formula SAE Brasil
+         (serve também de buffer enquanto os frames do vídeo carregam)
+         ════════════════════════════════════════════════ -->
+    <section id="fsae-info">
+        <div class="fsae-inner">
+
+            <!-- Hero: texto à esquerda + imagem à direita -->
+            <div class="fsae-hero">
+
+                <!-- Coluna de texto -->
+                <div class="fsae-hero-text">
+                    <p class="fsae-eyebrow fsae-fade" data-delay="1">Formula SAE Brasil</p>
+
+                    <h1 class="fsae-title fsae-fade" data-delay="2">
+                        Engenharia<br>que <span>compete</span><br>de verdade
+                    </h1>
+
+                    <p class="fsae-lead fsae-fade" data-delay="3">
+                        A Formula SAE é uma competição internacional de engenharia promovida pela SAE International
+                        na qual equipes universitárias projetam, constroem e comprovam um carro monoposto de
+                        fórmula em provas estáticas e dinâmicas. No Brasil, a edição é organizada pela SAE Brasil
+                        e reúne as melhores equipes do país em um único evento de alto desempenho.
+                    </p>
+                </div>
+
+                <!-- Coluna da imagem -->
+                <div class="fsae-hero-img-wrap fsae-fade" data-delay="3">
+                    <img src="../img/Patrocinadores/FORMULA_2025_perfil.png" alt="Formula SAE Brasil 2025" class="fsae-hero-img">
+                </div>
+
+            </div>
+
+            <!-- Números da competição -->
+            <div class="fsae-stats fsae-fade" data-delay="4">
+                <div class="fsae-stat">
+                    <div class="fsae-stat-num" data-count="600" data-prefix="+">+600</div>
+                    <div class="fsae-stat-label">equipes no mundo</div>
+                </div>
+                <div class="fsae-stat">
+                    <div class="fsae-stat-num" data-count="40" data-prefix="~">~40</div>
+                    <div class="fsae-stat-label">equipes no Brasil</div>
+                </div>
+                <div class="fsae-stat">
+                    <div class="fsae-stat-num" data-count="1979" data-prefix="">1979</div>
+                    <div class="fsae-stat-label">primeiro evento SAE</div>
+                </div>
+                <div class="fsae-stat">
+                    <div class="fsae-stat-num" data-count="1000" data-prefix="">1000</div>
+                    <div class="fsae-stat-label">pontos totais em jogo</div>
+                </div>
+            </div>
+
+            <!-- Disciplinas -->
+            <p class="fsae-grid-title fsae-fade" data-delay="5">Provas da competição</p>
+            <div class="fsae-disciplines">
+                <div class="fsae-card fsae-fade" data-delay="1">
+                    <div class="fsae-card-icon">📐</div>
+                    <div class="fsae-card-name">Design</div>
+                    <div class="fsae-card-desc">Os juízes avaliam as decisões de engenharia, o raciocínio por trás do projeto e a capacidade de defesa técnica da equipe.</div>
+                </div>
+                <div class="fsae-card fsae-fade" data-delay="2">
+                    <div class="fsae-card-icon">💰</div>
+                    <div class="fsae-card-name">Análise de Custo</div>
+                    <div class="fsae-card-desc">A equipe apresenta o custo real de fabricação do veículo, demonstrando viabilidade industrial e controle de orçamento.</div>
+                </div>
+                <div class="fsae-card fsae-fade" data-delay="3">
+                    <div class="fsae-card-icon">📊</div>
+                    <div class="fsae-card-name">Apresentação</div>
+                    <div class="fsae-card-desc">Simulação de pitch para investidores fictícios, avaliando o potencial de mercado do veículo e a comunicação da equipe.</div>
+                </div>
+                <div class="fsae-card fsae-fade" data-delay="4">
+                    <div class="fsae-card-icon">⚡</div>
+                    <div class="fsae-card-name">Aceleração</div>
+                    <div class="fsae-card-desc">Sprint de 75 metros para medir a performance de saída e a eficiência da transmissão de potência.</div>
+                </div>
+                <div class="fsae-card fsae-fade" data-delay="5">
+                    <div class="fsae-card-icon">🔄</div>
+                    <div class="fsae-card-name">Skid Pad</div>
+                    <div class="fsae-card-desc">Circuito em figura-8 que testa o equilíbrio de manuseio em curvas de raio constante — grip e aerodinâmica em destaque.</div>
+                </div>
+                <div class="fsae-card fsae-fade" data-delay="6">
+                    <div class="fsae-card-icon">🏁</div>
+                    <div class="fsae-card-name">Autocross & Enduro</div>
+                    <div class="fsae-card-desc">O Autocross é uma volta rápida em circuito técnico; o Enduro exige resistência de 22 km com troca obrigatória de piloto.</div>
+                </div>
+            </div>
+
+            <!-- Scroll hint – aparece enquanto frames carregam -->
+            <div class="fsae-scroll-hint fsae-fade" data-delay="6">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <polyline points="19 12 12 19 5 12"/>
+                </svg>
+                Role para ver o carro em ação
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Scroll-driven video section (canvas frame extraction) -->
+    <section id="car-parts-scroll">
+        <div id="car-parts-sticky">
+            <!-- Loading overlay -->
+            <div id="car-parts-loader" style="
+                position: absolute;
+                inset: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                background: #000;
+                z-index: 2;
+                gap: 16px;
+            ">
+                <div style="
+                    width: 48px; height: 48px;
+                    border: 3px solid rgba(255,255,255,0.2);
+                    border-top-color: #fff;
+                    border-radius: 50%;
+                    animation: cpSpin 0.8s linear infinite;
+                "></div>
+                <span id="car-parts-progress" style="color:#fff; font-family:sans-serif; font-size:0.85rem; letter-spacing:0.08em;">Carregando...</span>
+            </div>
+
+            <!-- Canvas: drawn instantly on scroll (no seek delay) -->
+            <canvas id="car-parts-canvas" style="
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+            "></canvas>
+
+            <!-- Overlay que aparece ao final do vídeo -->
+            <div id="cp-end-overlay">
+                <div id="cp-end-inner">
+                    <img src="../img/Scorpion/LogoOriginalCores.png" alt="Scorpion FSAE" id="cp-end-logo">
+                    <h2 id="cp-end-title">Faça parte desta história</h2>
+                    <p id="cp-end-text">
+                        A Scorpion FSAE é formada por estudantes apaixonados por engenharia.<br>
+                        Seu apoio nos permite ir mais longe — dentro e fora das pistas.
+                    </p>
+                    <a href="./patrocinio.html">
+                        <button id="cp-end-btn">APOIE A EQUIPE</button>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Camada de escurecimento gradual controlada pelo scroll -->
+            <div id="cp-black-fade" style="
+                position: absolute;
+                inset: 0;
+                background: #000;
+                z-index: 2; /* Atrás do texto (z-index 3), mas cobrindo o vídeo */
+                opacity: 0;
+                pointer-events: none;
+            "></div>
+
+            <!-- Hidden video used only for frame extraction -->
+            <video
+                id="car-parts-video"
+                src="../img/Vids/CarParts.mp4"
+                muted playsinline preload="auto"
+                style="display:none;"
+            ></video>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════
+         Seção: Primeiro Render Conceitual
+         ════════════════════════════════════════════════ -->
+    <section id="render-conceitual" class="render-section">
+        <div class="fsae-inner">
+            <div class="render-hero">
+                <div class="render-hero-text">
+                    <p class="fsae-eyebrow fsae-fade" data-delay="1">Design e Engenharia</p>
+                    <h2 class="fsae-title fsae-fade" data-delay="2" style="font-size: clamp(2rem, 4vw, 3.2rem);">
+                        Primeiro Render<br><span>Conceitual</span>
+                    </h2>
+                    <p class="fsae-lead fsae-fade" data-delay="3">
+                        Apresentamos a primeira visão em 3D do nosso futuro monoposto. 
+                        Este render conceitual foi meticulosamente desenvolvido com base nos desenhos 
+                        técnicos iniciais da equipe de engenharia, marcando o primeiro passo 
+                        visual entre o projeto no papel e a pista. Passe o mouse sobre a imagem 
+                        para revelar os rascunhos técnicos estruturais que deram origem ao design.
+                    </p>
+                </div>
+                
+                <div class="render-hero-img-wrap fsae-fade" data-delay="4" id="render-magic-container">
+                    <!-- A base é o R1 (Render). O CSS background fará o papel da base. -->
+                    <!-- A camada D1 (Desenho) ficará por cima e será revelada pela lanterna. -->
+                    <div class="render-img-overlay"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="../js/startLoading.js"></script>
+    <script src="../js/teamFade.js"></script>
+    <script src="../js/ui.js"></script>
+
+    <script src="../js/competicao.js"></script>
+</body>
+
+</html>
