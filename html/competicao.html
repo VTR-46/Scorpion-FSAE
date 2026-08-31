@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipe</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:ital,wght@0,400;0,500;0,600;0,700;1,700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <link rel="shortcut icon" href="../img/Scorpion/LogoOriginalCores.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="../dist/output.css">
+    <link rel="stylesheet" href="../css/output.css">
+
+    <style>
+        /* ── Formula SAE section ── */
+        #fsae-info {
+            background-color: var(--bg-section, #0e1c37);
+            color: var(--white, #eeedf1);
+            font-family: var(--font-body, "Inter", sans-serif);
+            padding: 100px 2rem 80px;
+        }
+
+        .fsae-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .fsae-eyebrow {
+            font-family: var(--font-display, "Oswald", sans-serif);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--cyan, #00b3fe);
+            margin-bottom: 1rem;
+        }
+
+        .fsae-title {
+            font-family: var(--font-display, "Oswald", sans-serif);
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+        }
+
+        .fsae-title span {
+            color: var(--cyan, #00b3fe);
+        }
+
+        .fsae-lead {
+            font-size: 1.1rem;
+            line-height: 1.75;
+            color: var(--muted, #afadbc);
+            max-width: 680px;
+            margin-bottom: 0; /* removido — hero gerencia o espaçamento */
+        }
+
+        /* ── Layout hero: texto + imagem lado a lado ── */
+        .fsae-hero {
+            display: grid;
+            grid-template-columns: 55fr 45fr;
+            gap: 3rem;
+            align-items: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .fsae-hero-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0;       /* os filhos têm suas próprias margens */
+        }
+
+        /* Restaura margens dos filhos dentro do hero */
+        .fsae-hero-text .fsae-eyebrow  { margin-bottom: 1rem; }
+        .fsae-hero-text .fsae-title    { margin-bottom: 1.5rem; }
+
+        .fsae-hero-img-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fsae-hero-img {
+            width: 100%;
+            max-height: 460px;
+            object-fit: contain;
+            border-radius: 8px;
+            filter: drop-shadow(0 8px 32px rgba(0, 179, 254, 0.18));
+        }
+
+        /* Mobile: empilha texto em cima, imagem embaixo */
+        @media (max-width: 768px) {
+            .fsae-hero {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .fsae-hero-img {
+                max-height: 280px;
+            }
+        }
+
+        /* ── Layout Render Conceitual ── */
+        .render-hero {
+            display: grid;
+            grid-template-columns: 45fr 55fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .render-hero-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        
+        .render-hero-text .fsae-eyebrow { margin-bottom: 1rem; }
+        .render-hero-text .fsae-title { margin-bottom: 1.5rem; }
+
+        .render-hero-img-wrap {
+            position: relative;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            /* Variáveis para a máscara estilo lanterna */
+            --rx: 50%;
+            --ry: 50%;
+            background-image: url('../img/Scorpion/R1.png');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .render-hero-img-wrap::before {
+            content: "";
+            display: block;
+            padding-top: 65%; /* Define a proporção da imagem (aprox 16:10) */
+        }
+
+        .render-img-overlay {
+            position: absolute;
+            inset: 0;
+            background-image: url('../img/Scorpion/D1.png');
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+            /* Máscara: visível no centro (onde o mouse está) e transparente ao redor */
+            -webkit-mask-image: radial-gradient(circle 250px at var(--rx) var(--ry), black 40%, transparent 100%);
+            mask-image: radial-gradient(circle 250px at var(--rx) var(--ry), black 40%, transparent 100%);
+            opacity: 0; /* Invisível por padrão */
+            transition: opacity 0.3s ease;
+        }
+
+        .render-hero-img-wrap:hover .render-img-overlay {
+            opacity: 1; /* Revela o desenho técnico quando em hover */
+        }
+        
+        @media (max-width: 992px) {
+            .render-hero {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+            .render-hero-img-wrap::before {
+                padding-top: 75%;
+            }
+        }
+
+        /* Stats row */
+        .fsae-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .fsae-stat {
+            border-left: 3px solid var(--cyan, #00b3fe);
+            padding-left: 1.25rem;
+        }
+
+        .fsae-stat-num {
+            font-family: var(--font-display, "Oswald", sans-serif);
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--white, #eeedf1);
+            line-height: 1;
+        }
+
+        .fsae-stat-label {
+            font-size: 0.78rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted, #afadbc);
+            margin-top: 0.3rem;
+        }
+
+        /* Disciplines grid */
+        .fsae-grid-title {
+            font-family: var(--font-display, "Oswald", sans-serif);
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--cyan, #00b3fe);
+            margin-bottom: 1.25rem;
+        }
+
+        .fsae-disciplines {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 4rem;
+        }
+
+        .fsae-card {
+            background: rgba(0, 179, 254, 0.04);
+            border: 1px solid rgba(0, 179, 254, 0.18);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            transition: border-color 0.25s, background 0.25s;
+        }
+
+        .fsae-card:hover {
+            border-color: var(--cyan, #00b3fe);
+            background: rgba(0, 179, 254, 0.08);
+        }
+
+        .fsae-card-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .fsae-card-name {
+            font-family: var(--font-display, "Oswald", sans-serif);
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--white, #eeedf1);
+            margin-bottom: 0.35rem;
+        }
+
+        .fsae-card-desc {
+            font-size: 0.82rem;
+            line-height: 1.55;
+            color: var(--muted, #afadbc);
+        }
+
+        /* Scroll hint */
+        .fsae-scroll-hint {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.8rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted, #afadbc);
+        }
+
+        .fsae-scroll-hint svg {
+            animation: fsaeBounce 1.6s ease-in-out infinite;
+        }
+
+        @keyframes fsaeBounce {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(6px); }
+        }
+
+        /* ════════════════════════════════════════
+           FADE-IN / SLIDE-UP  — sistema de animação
+           ════════════════════════════════════════ */
+
+        /* Estado inicial: invisible + deslocado para baixo */
+        .fsae-fade {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* Quando o IntersectionObserver adiciona essa classe → elemento aparece */
+        .fsae-fade.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Delays escalonados para grupos de elementos */
+        .fsae-fade[data-delay="1"] { transition-delay: 0.10s; }
+        .fsae-fade[data-delay="2"] { transition-delay: 0.20s; }
+        .fsae-fade[data-delay="3"] { transition-delay: 0.30s; }
+        .fsae-fade[data-delay="4"] { transition-delay: 0.40s; }
+        .fsae-fade[data-delay="5"] { transition-delay: 0.50s; }
+        .fsae-fade[data-delay="6"] { transition-delay: 0.60s; }
+
+        /* Cards de disciplina: fade com delay maior para leitura */
+        .fsae-card.fsae-fade[data-delay="1"] { transition-delay: 0.05s; }
+        .fsae-card.fsae-fade[data-delay="2"] { transition-delay: 0.15s; }
+        .fsae-card.fsae-fade[data-delay="3"] { transition-delay: 0.25s; }
+        .fsae-card.fsae-fade[data-delay="4"] { transition-delay: 0.35s; }
+        .fsae-card.fsae-fade[data-delay="5"] { transition-delay: 0.45s; }
+        .fsae-card.fsae-fade[data-delay="6"] { transition-delay: 0.55s; }
+
+        /* ════════════════════════════════════════
+           EM BREVE - LANTERNA
+           ════════════════════════════════════════ */
+        .em-breve-section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background-image: url('../img/Scorpion/CarroLon.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Opcional, dá um efeito legal */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            --x: 50%;
+            --y: 50%;
+        }
+
+        .em-breve-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgb(0, 0, 0); /* O escurecimento base */
+            z-index: 1;
+            pointer-events: none;
+            /* O gradiente radial cria um 'furo' transparente na máscara preta */
+            -webkit-mask-image: radial-gradient(circle 300px at var(--x) var(--y), transparent 10%, black 80%);
+            mask-image: radial-gradient(circle 300px at var(--x) var(--y), transparent 10%, black 80%);
+            transition: -webkit-mask-image 0.1s ease, mask-image 0.1s ease;
+        }
+
+        .em-breve-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 0 2rem;
+            pointer-events: none; /* Permite que o mouse interaja com a section atrás */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Tela de Loading -->
+    <div id="loadingScreen">
+        <video id="loadingVideo" autoplay muted loop playsinline>
+            <source src="../img/Scorpion/ScorpionRUN-opt.mp4" type="video/mp4">
+        </video>
+        <div id="loadingBar">
+            <div id="loadingBarFill"></div>
+        </div>
+    </div>
+
+    <header class="main-tool-bar">
+        <nav>
+            <a href="../index.html" class="logo">
+                <img src="../img/Scorpion/SCORPION FSAE LOGO FULL 1.png" alt="Scorpion FSAE">
+                <span class="logo-text">Scorpion <em>FSAE</em></span>
+            </a>
+
+            <ul>
+                <li><a href="./equipe.html">Equipe</a></li>
+                <li><a href="./patrocinio.html">Patrocinadores</a></li>
+                <li><a href="#competicao">Competição</a></li>
+                <li><a href="./loja.html">Loja</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ════════════════════════════════════════════════
+         Seção Em Breve - Novo Carro (Lanterna Effect)
+         ════════════════════════════════════════════════ -->
+    <section id="em-breve-section" class="em-breve-section">
+        <div class="em-breve-overlay"></div>
+        <div class="em-breve-content">
+            <h1 class="fsae-title fsae-fade" data-delay="1">EM BREVE...</h1>
+            <p class="fsae-lead fsae-fade" data-delay="2" style="max-width: 800px; margin: 1rem auto 0; text-align: center;">
+                Em breve iremos revelar novos render do carro junto do seu nome escolhido pela comunidade.
+            </p>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════
+         Seção informativa – Formula SAE Brasil
+         (serve também de buffer enquanto os frames do vídeo carregam)
+         ════════════════════════════════════════════════ -->
+    <section id="fsae-info">
+        <div class="fsae-inner">
+
+            <!-- Hero: texto à esquerda + imagem à direita -->
+            <div class="fsae-hero">
+
+                <!-- Coluna de texto -->
+                <div class="fsae-hero-text">
+                    <p class="fsae-eyebrow fsae-fade" data-delay="1">Formula SAE Brasil</p>
+
+                    <h1 class="fsae-title fsae-fade" data-delay="2">
+                        Engenharia<br>que <span>compete</span><br>de verdade
+                    </h1>
+
+                    <p class="fsae-lead fsae-fade" data-delay="3">
+                        A Formula SAE é uma competição internacional de engenharia promovida pela SAE International
+                        na qual equipes universitárias projetam, constroem e comprovam um carro monoposto de
+                        fórmula em provas estáticas e dinâmicas. No Brasil, a edição é organizada pela SAE Brasil
+                        e reúne as melhores equipes do país em um único evento de alto desempenho.
+                    </p>
+                </div>
+
+                <!-- Coluna da imagem -->
+                <div class="fsae-hero-img-wrap fsae-fade" data-delay="3">
+                    <img src="../img/Patrocinadores/FORMULA_2025_perfil.png" alt="Formula SAE Brasil 2025" class="fsae-hero-img">
+                </div>
+
+            </div>
+
+            <!-- Números da competição -->
+            <div class="fsae-stats fsae-fade" data-delay="4">
+                <div class="fsae-stat">
+                    <div class="fsae-stat-num" data-count="600" data-prefix="+">+600</div>
+                    <div class="fsae-stat-label">equipes no mundo</div>
+                </div>
+                <div class="fsae-stat">
+                    <div class="fsae-stat-num" data-count="40" data-prefix="~">~40</div>
+                    <div class="fsae-stat-label">equipes no Brasil</div>
+                </div>
+                <div class="fsae-stat">
+                    <div class="fsae-stat-num" data-count="1979" data-prefix="">1979</div>
+                    <div class="fsae-stat-label">primeiro evento SAE</div>
+                </div>
+                <div class="fsae-stat">
+                    <div class="fsae-stat-num" data-count="1000" data-prefix="">1000</div>
+                    <div class="fsae-stat-label">pontos totais em jogo</div>
+                </div>
+            </div>
+
+            <!-- Disciplinas -->
+            <p class="fsae-grid-title fsae-fade" data-delay="5">Provas da competição</p>
+            <div class="fsae-disciplines">
+                <div class="fsae-card fsae-fade" data-delay="1">
+                    <div class="fsae-card-icon">📐</div>
+                    <div class="fsae-card-name">Design</div>
+                    <div class="fsae-card-desc">Os juízes avaliam as decisões de engenharia, o raciocínio por trás do projeto e a capacidade de defesa técnica da equipe.</div>
+                </div>
+                <div class="fsae-card fsae-fade" data-delay="2">
+                    <div class="fsae-card-icon">💰</div>
+                    <div class="fsae-card-name">Análise de Custo</div>
+                    <div class="fsae-card-desc">A equipe apresenta o custo real de fabricação do veículo, demonstrando viabilidade industrial e controle de orçamento.</div>
+                </div>
+                <div class="fsae-card fsae-fade" data-delay="3">
+                    <div class="fsae-card-icon">📊</div>
+                    <div class="fsae-card-name">Apresentação</div>
+                    <div class="fsae-card-desc">Simulação de pitch para investidores fictícios, avaliando o potencial de mercado do veículo e a comunicação da equipe.</div>
+                </div>
+                <div class="fsae-card fsae-fade" data-delay="4">
+                    <div class="fsae-card-icon">⚡</div>
+                    <div class="fsae-card-name">Aceleração</div>
+                    <div class="fsae-card-desc">Sprint de 75 metros para medir a performance de saída e a eficiência da transmissão de potência.</div>
+                </div>
+                <div class="fsae-card fsae-fade" data-delay="5">
+                    <div class="fsae-card-icon">🔄</div>
+                    <div class="fsae-card-name">Skid Pad</div>
+                    <div class="fsae-card-desc">Circuito em figura-8 que testa o equilíbrio de manuseio em curvas de raio constante — grip e aerodinâmica em destaque.</div>
+                </div>
+                <div class="fsae-card fsae-fade" data-delay="6">
+                    <div class="fsae-card-icon">🏁</div>
+                    <div class="fsae-card-name">Autocross & Enduro</div>
+                    <div class="fsae-card-desc">O Autocross é uma volta rápida em circuito técnico; o Enduro exige resistência de 22 km com troca obrigatória de piloto.</div>
+                </div>
+            </div>
+
+            <!-- Scroll hint – aparece enquanto frames carregam -->
+            <div class="fsae-scroll-hint fsae-fade" data-delay="6">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <polyline points="19 12 12 19 5 12"/>
+                </svg>
+                Role para ver o carro em ação
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Scroll-driven video section (canvas frame extraction) -->
+    <section id="car-parts-scroll" style="
+        position: relative; 
+        height: 600vh;
+        margin-top: -120px;
+        z-index: 10;
+    ">
+        <div id="car-parts-sticky" style="
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background: #000;
+            transform-origin: center top;
+            will-change: transform, border-radius, opacity, box-shadow;
+        ">
+            <!-- Loading overlay -->
+            <div id="car-parts-loader" style="
+                position: absolute;
+                inset: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                background: #000;
+                z-index: 2;
+                gap: 16px;
+            ">
+                <div style="
+                    width: 48px; height: 48px;
+                    border: 3px solid rgba(255,255,255,0.2);
+                    border-top-color: #fff;
+                    border-radius: 50%;
+                    animation: cpSpin 0.8s linear infinite;
+                "></div>
+                <span id="car-parts-progress" style="color:#fff; font-family:sans-serif; font-size:0.85rem; letter-spacing:0.08em;">Carregando...</span>
+            </div>
+
+            <!-- Canvas: drawn instantly on scroll (no seek delay) -->
+            <canvas id="car-parts-canvas" style="
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+            "></canvas>
+
+            <!-- Overlay que aparece ao final do vídeo -->
+            <div id="cp-end-overlay">
+                <div id="cp-end-inner">
+                    <img src="../img/Scorpion/LogoOriginalCores.png" alt="Scorpion FSAE" id="cp-end-logo">
+                    <h2 id="cp-end-title">Faça parte desta história</h2>
+                    <p id="cp-end-text">
+                        A Scorpion FSAE é formada por estudantes apaixonados por engenharia.<br>
+                        Seu apoio nos permite ir mais longe — dentro e fora das pistas.
+                    </p>
+                    <a href="./patrocinio.html">
+                        <button id="cp-end-btn">APOIE A EQUIPE</button>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Camada de escurecimento gradual controlada pelo scroll -->
+            <div id="cp-black-fade" style="
+                position: absolute;
+                inset: 0;
+                background: #000;
+                z-index: 2; /* Atrás do texto (z-index 3), mas cobrindo o vídeo */
+                opacity: 0;
+                pointer-events: none;
+            "></div>
+
+            <!-- Hidden video used only for frame extraction -->
+            <video
+                id="car-parts-video"
+                src="../img/Vids/CarParts.mp4"
+                muted playsinline preload="auto"
+                style="display:none;"
+            ></video>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════
+         Seção: Primeiro Render Conceitual
+         ════════════════════════════════════════════════ -->
+    <section id="render-conceitual" style="background-color: #000; padding: 10rem 0 6rem 0;">
+        <div class="fsae-inner">
+            <div class="render-hero">
+                <div class="render-hero-text">
+                    <p class="fsae-eyebrow fsae-fade" data-delay="1">Design e Engenharia</p>
+                    <h2 class="fsae-title fsae-fade" data-delay="2" style="font-size: clamp(2rem, 4vw, 3.2rem);">
+                        Primeiro Render<br><span>Conceitual</span>
+                    </h2>
+                    <p class="fsae-lead fsae-fade" data-delay="3">
+                        Apresentamos a primeira visão em 3D do nosso futuro monoposto. 
+                        Este render conceitual foi meticulosamente desenvolvido com base nos desenhos 
+                        técnicos iniciais da equipe de engenharia, marcando o primeiro passo 
+                        visual entre o projeto no papel e a pista. Passe o mouse sobre a imagem 
+                        para revelar os rascunhos técnicos estruturais que deram origem ao design.
+                    </p>
+                </div>
+                
+                <div class="render-hero-img-wrap fsae-fade" data-delay="4" id="render-magic-container">
+                    <!-- A base é o R1 (Render). O CSS background fará o papel da base. -->
+                    <!-- A camada D1 (Desenho) ficará por cima e será revelada pela lanterna. -->
+                    <div class="render-img-overlay"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        @keyframes cpSpin { to { transform: rotate(360deg); } }
+
+        /* ── End-of-video overlay ── */
+        #cp-end-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0);          /* começa transparente */
+            z-index: 3;
+            pointer-events: none;                   /* invisível = não bloqueia cliques */
+            transition: background 0.8s ease;
+        }
+
+        #cp-end-overlay.active {
+            background: rgba(0, 0, 0, 0.72);
+            pointer-events: auto;
+        }
+
+        #cp-end-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1.25rem;
+            padding: 2rem;
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s ease 0.3s, transform 0.7s ease 0.3s;
+        }
+
+        #cp-end-overlay.active #cp-end-inner {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #cp-end-logo {
+            width: clamp(80px, 12vw, 140px);
+            filter: drop-shadow(0 0 18px rgba(0, 179, 254, 0.5));
+        }
+
+        #cp-end-title {
+            font-family: var(--font-display, "Oswald", sans-serif);
+            font-size: clamp(1.6rem, 4vw, 2.8rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #fff;
+            letter-spacing: 0.04em;
+            margin: 0;
+        }
+
+        #cp-end-text {
+            font-family: var(--font-body, "Inter", sans-serif);
+            font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+            line-height: 1.7;
+            color: rgba(238, 237, 241, 0.8);
+            max-width: 520px;
+            margin: 0;
+        }
+
+        #cp-end-btn {
+            font-family: var(--font-display, "Oswald", sans-serif);
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #0e1c37;
+            background: #00b3fe;
+            border: none;
+            border-radius: 4px;
+            padding: 0.85rem 2.5rem;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(0, 179, 254, 0.35);
+        }
+
+        #cp-end-btn:hover {
+            background: #33c2fe;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(0, 179, 254, 0.5);
+        }
+    </style>
+
+    <script>
+    /* ════════════════════════════════════════════════
+       Efeito "Lanterna" na Seção Em Breve
+       ════════════════════════════════════════════════ */
+    (function() {
+        const emBreve = document.getElementById('em-breve-section');
+        if (emBreve) {
+            emBreve.addEventListener('mousemove', function(e) {
+                const rect = emBreve.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                emBreve.style.setProperty('--x', x + 'px');
+                emBreve.style.setProperty('--y', y + 'px');
+            });
+            
+            emBreve.addEventListener('mouseleave', function() {
+                // Centraliza a lanterna novamente quando o mouse sai
+                emBreve.style.setProperty('--x', '50%');
+                emBreve.style.setProperty('--y', '50%');
+            });
+        }
+    })();
+
+    /* ════════════════════════════════════════════════
+       Efeito "Raio-X" na Seção de Render Conceitual
+       ════════════════════════════════════════════════ */
+    (function() {
+        const magicContainer = document.getElementById('render-magic-container');
+        if (magicContainer) {
+            magicContainer.addEventListener('mousemove', function(e) {
+                const rect = magicContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                magicContainer.style.setProperty('--rx', x + 'px');
+                magicContainer.style.setProperty('--ry', y + 'px');
+            });
+            
+            magicContainer.addEventListener('mouseleave', function() {
+                // Ao sair, a opacidade já é removida pelo CSS (:hover).
+                // Apenas resetamos a posição para o centro suavemente.
+                magicContainer.style.setProperty('--rx', '50%');
+                magicContainer.style.setProperty('--ry', '50%');
+            });
+        }
+    })();
+    </script>
+
+    <script>
+    (function () {
+        const section  = document.getElementById('car-parts-scroll');
+        const video    = document.getElementById('car-parts-video');
+        const canvas   = document.getElementById('car-parts-canvas');
+        const loader   = document.getElementById('car-parts-loader');
+        const progText = document.getElementById('car-parts-progress');
+        const overlay  = document.getElementById('cp-end-overlay');
+        const ctx      = canvas.getContext('2d');
+
+        const FPS            = 30;    // frames extraídos por segundo
+        const AUTO_TIME      = 3;     // segundo do vídeo que dispara o autoplay
+        const PLAYBACK_SPEED = 8.5;  // multiplicador de velocidade do autoplay
+        let   VIDEO_DUR      = 8;     // sobrescrito pela duração real
+
+        const frames = [];
+        let displayedFrame = -1;
+        let autoPlaying    = false;
+        let videoFinished  = false;
+        let autoRafId      = null;    // ID do requestAnimationFrame do autoplay
+
+        /* ── Desenha frame com object-fit:cover ── */
+        function drawCover(bitmap) {
+            const cw = canvas.width, ch = canvas.height;
+            const bw = bitmap.width, bh = bitmap.height;
+            const scale = Math.max(cw / bw, ch / bh);
+            const sw = bw * scale, sh = bh * scale;
+            ctx.drawImage(bitmap, (cw - sw) / 2, (ch - sh) / 2, sw, sh);
+        }
+
+        /* ── Seek promise ── */
+        function seekTo(t) {
+            return new Promise(resolve => {
+                video.onseeked = resolve;
+                video.currentTime = t;
+            });
+        }
+
+        /* ── Extrai todos os frames ── */
+        async function captureAllFrames() {
+            VIDEO_DUR = video.duration;
+            const totalFrames = Math.ceil(VIDEO_DUR * FPS);
+
+            canvas.width  = window.innerWidth  * window.devicePixelRatio;
+            canvas.height = window.innerHeight * window.devicePixelRatio;
+
+            for (let i = 0; i < totalFrames; i++) {
+                await seekTo(i / FPS);
+                frames.push(await createImageBitmap(video));
+                progText.textContent = `Carregando… ${Math.round((i + 1) / totalFrames * 100)}%`;
+            }
+
+            drawCover(frames[0]);
+            loader.style.display = 'none';
+            setupScroll();
+        }
+
+        /* ── Cancela autoplay e restaura controle do scroll ── */
+        function cancelAutoPlay() {
+            if (autoRafId !== null) {
+                cancelAnimationFrame(autoRafId);
+                autoRafId = null;
+            }
+            autoPlaying   = false;
+            videoFinished = false;
+
+            // Esconde o overlay com transição suave
+            overlay.classList.remove('active');
+        }
+
+        /* ── Mostra overlay final ── */
+        function showEndOverlay() {
+            videoFinished = true;
+            overlay.classList.add('active');
+        }
+
+        /* ── Autoplay com tempo absoluto (sem drift) e velocidade acelerada ── */
+        function startAutoPlay(fromFrame) {
+            if (autoPlaying) return;
+            autoPlaying = true;
+
+            const startTime = performance.now();
+            const startFrame = fromFrame;
+
+            function rafStep() {
+                if (!autoPlaying) return;
+                
+                const now = performance.now();
+                const elapsed = (now - startTime) / 1000;
+                
+                // Calcula frames a avançar baseado no tempo absoluto
+                const framesToAdvance = Math.round(elapsed * FPS * PLAYBACK_SPEED);
+                const targetFrame = Math.min(startFrame + framesToAdvance, frames.length - 1);
+
+                if (targetFrame !== displayedFrame) {
+                    displayedFrame = targetFrame;
+                    drawCover(frames[targetFrame]);
+                }
+
+                if (targetFrame < frames.length - 1) {
+                    autoRafId = requestAnimationFrame(rafStep);
+                } else {
+                    videoFinished = true;
+                    autoPlaying = false;
+                    showEndOverlay();
+                    
+                    // ── ENCURTAR O SCROLL ──
+                    // Quando o vídeo termina sozinho, o usuário não precisa rolar todo o espaço vazio.
+                    const rect = section.getBoundingClientRect();
+                    const scrolled = -rect.top;
+                    
+                    // Constantes da seção
+                    const defaultVideoScroll = window.innerHeight * 3;
+                    const defaultFadeScroll = window.innerHeight * 0.8;
+                    
+                    if (scrolled < defaultVideoScroll) {
+                        // Encontra a variável dinâmica de fade no escopo abaixo
+                        if (typeof window.dynamicFadeStartRef === 'function') {
+                            window.dynamicFadeStartRef(Math.max(scrolled, 0));
+                        }
+                        // A nova altura ajusta o fim da seção para logo após o scroll atual
+                        section.style.height = (Math.max(scrolled, 0) + defaultFadeScroll + window.innerHeight) + 'px';
+                    }
+                    return; // encerra RAF
+                }
+            }
+            autoRafId = requestAnimationFrame(rafStep);
+        }
+
+        /* ── Scroll handler ── */
+        function setupScroll() {
+            const autoTriggerFrame = Math.round((AUTO_TIME / VIDEO_DUR) * (frames.length - 1));
+            const stickyDiv = document.getElementById('car-parts-sticky');
+            const blackFade = document.getElementById('cp-black-fade');
+
+            // Configurações de altura (reduzimos o scroll total necessário)
+            const defaultVideoScroll = window.innerHeight * 3; // 3 telas completas para o vídeo
+            const defaultFadeScroll = window.innerHeight * 0.8; // 0.8 tela para o fade preto
+            let dynamicFadeStart = defaultVideoScroll;
+            
+            // Callback para o autoplay atualizar o início do fade
+            window.dynamicFadeStartRef = function(val) {
+                dynamicFadeStart = val;
+            };
+            
+            // Aplica altura total inicialmente
+            section.style.height = (defaultVideoScroll + defaultFadeScroll + window.innerHeight) + 'px';
+
+            function onScroll() {
+                const rect       = section.getBoundingClientRect();
+                
+                // ── Efeito de transição de entrada (Scale + Radius + Shadow) ──
+                if (rect.top > 0 && rect.top <= window.innerHeight) {
+                    const ratio = rect.top / window.innerHeight;
+                    const scale = 0.85 + (0.15 * (1 - ratio));
+                    const br    = 60 * ratio;
+                    const alpha = 0.8 * (1 - ratio);
+                    
+                    stickyDiv.style.transform = `scale(${scale})`;
+                    stickyDiv.style.borderRadius = `${br}px ${br}px 0 0`;
+                    stickyDiv.style.boxShadow = `0 -20px 80px rgba(0,0,0,${alpha})`;
+                    stickyDiv.style.opacity = 0.3 + (0.7 * (1 - ratio));
+                } else if (rect.top <= 0) {
+                    stickyDiv.style.transform = `scale(1)`;
+                    stickyDiv.style.borderRadius = `0`;
+                    stickyDiv.style.boxShadow = `none`;
+                    stickyDiv.style.opacity = 1;
+                }
+
+                const scrolled = -rect.top;
+                
+                // O progresso sempre usa a distância fixa do vídeo para manter o mapeamento exato
+                const progress   = Math.min(Math.max(scrolled / defaultVideoScroll, 0), 1);
+                const idx        = Math.round(progress * (frames.length - 1));
+
+                // ── FADE PARA PRETO ──
+                let fadeProgress = 0;
+                if (scrolled > dynamicFadeStart) {
+                    fadeProgress = Math.min((scrolled - dynamicFadeStart) / defaultFadeScroll, 1);
+                }
+                
+                if (blackFade) {
+                    blackFade.style.opacity = fadeProgress;
+                }
+
+                // ── Scroll para TRÁS abaixo do ponto de disparo ──
+                if ((autoPlaying || videoFinished) && idx < autoTriggerFrame) {
+                    cancelAutoPlay();
+                    // Restaura a altura total caso o usuário volte
+                    dynamicFadeStart = defaultVideoScroll;
+                    section.style.height = (defaultVideoScroll + defaultFadeScroll + window.innerHeight) + 'px';
+                }
+
+                // ── Modo scroll-driven ──
+                if (!autoPlaying) {
+                    // Só atualiza o frame se o vídeo não estiver terminado (autoplay prende no último frame)
+                    if (idx !== displayedFrame && !videoFinished) {
+                        displayedFrame = idx;
+                        drawCover(frames[idx]);
+                    }
+
+                    if (idx >= autoTriggerFrame && !videoFinished) {
+                        startAutoPlay(idx);
+                    }
+                }
+            }
+
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+        }
+
+        if (video.readyState >= 1) {
+            captureAllFrames();
+        } else {
+            video.addEventListener('loadedmetadata', captureAllFrames);
+        }
+    })();
+    </script>
+
+    <script src="../js/startLoading.js"></script>
+    <script src="../js/teamFade.js"></script>
+    <script src="../js/ui.js"></script>
+
+    <script>
+    /* ════════════════════════════════════════════════
+       1. FADE-IN — IntersectionObserver
+       ════════════════════════════════════════════════ */
+    (function () {
+        const fadeEls = document.querySelectorAll('.fsae-fade');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // animação acontece só 1 vez
+                }
+            });
+        }, {
+            threshold: 0.12   // dispara quando 12% do elemento está visível
+        });
+
+        fadeEls.forEach(el => observer.observe(el));
+    })();
+
+    /* ════════════════════════════════════════════════
+       2. COUNTER ANIMADO — sobe de 0 até o valor real
+       ════════════════════════════════════════════════ */
+    (function () {
+        const DURATION = 1600; // ms
+
+        // easeOutQuart: rápido no início, desacelera no fim
+        function easeOutQuart(t) {
+            return 1 - Math.pow(1 - t, 4);
+        }
+
+        function animateCounter(el, target, prefix) {
+            const start = performance.now();
+
+            function step(now) {
+                const elapsed  = now - start;
+                const progress = Math.min(elapsed / DURATION, 1);
+                const eased    = easeOutQuart(progress);
+                const current  = Math.round(eased * target);
+
+                el.textContent = prefix + current;
+
+                if (progress < 1) requestAnimationFrame(step);
+            }
+
+            requestAnimationFrame(step);
+        }
+
+        // Observa o bloco de stats: quando entrar na viewport, dispara os contadores
+        const statsBlock = document.querySelector('.fsae-stats');
+        if (!statsBlock) return;
+
+        let counted = false;
+
+        const counterObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !counted) {
+                counted = true;
+                counterObserver.disconnect();
+
+                // Pequeno delay para o fade-in da stat começar primeiro
+                setTimeout(() => {
+                    document.querySelectorAll('.fsae-stat-num[data-count]').forEach(el => {
+                        const target = parseInt(el.dataset.count, 10);
+                        const prefix = el.dataset.prefix || '';
+                        animateCounter(el, target, prefix);
+                    });
+                }, 400);
+            }
+        }, { threshold: 0.2 });
+
+        counterObserver.observe(statsBlock);
+    })();
+    </script>
+</body>
+
+</html>

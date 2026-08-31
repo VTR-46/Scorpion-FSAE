@@ -1,6 +1,6 @@
 // ===================== TELA DE LOADING (5s) =====================
 (function () {
-    const LOADING_DURATION = 2000; // 5 segundos
+    const LOADING_DURATION = 4000; // 5 segundos
 
     function startLoading() {
         const screen = document.getElementById('loadingScreen');
