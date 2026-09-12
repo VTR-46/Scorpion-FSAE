@@ -45,7 +45,7 @@
             <!-- Produto 1: Chaveiro -->
             <article class="produto">
                 <div class="produto-img">
-                    <img src="../img/Scorpion/LogoOriginalCores.png" alt="Chaveiro Scorpion FSAE" loading="lazy">
+                    <img src="../img/Produtos/chaveiro.png" alt="Chaveiro Scorpion FSAE" loading="lazy">
                 </div>
                 <div class="produto-info">
                     <h2>Chaveiro Scorpion</h2>
@@ -53,7 +53,27 @@
                     <div class="produto-preco">
                         <span class="preco">R$ 5,00</span>
                     </div>
-                    <button class="p1-bnt btn-comprar" data-produto="chaveiro">Comprar</button>
+                    <a href="https://wa.me/16996096284?text=Ol%C3%A1%20gostaria%20de%20comprar%20os%20chaveiros%20da%20Scorpion%21" target="_blank" rel="noopener noreferrer" class="p1-bnt" style="display: block; text-align: center; text-decoration: none; box-sizing: border-box;">Comprar</a>
+                </div>
+            </article>
+
+            
+            <!-- Produto 3: Tempo Limitado -->
+            <article class="produto produto-destaque">
+                <!-- Faixa diagonal "Tempo Limitado" -->
+                <div class="ribbon-tempo-limitado">
+                    <span>Tempo<br>Limitado</span>
+                </div>
+                <div class="produto-img">
+                    <img src="../img/Produtos/frango.png" alt="Frango Congelado Empanado Tempo Limitado" loading="lazy">
+                </div>
+                <div class="produto-info">
+                    <h2>Frango Congelado Temperado</h2>
+                    <p class="produto-desc">150g s/pele, s/osso e empanado</p>
+                    <div class="produto-preco">
+                        <span class="preco">R$ 06,00</span>
+                    </div>
+                    <a href="https://wa.me/16996096284" target="_blank" rel="noopener noreferrer" class="p1-bnt" style="display: block; text-align: center; text-decoration: none; box-sizing: border-box;">Comprar</a>
                 </div>
             </article>
 
@@ -71,6 +91,7 @@
                     <button class="p2-bnt" disabled style="opacity: 0.5; cursor: not-allowed;">Indisponível</button>
                 </div>
             </article>
+
 
             <!-- Produto 4: Adesivo -->
             <article class="produto">
@@ -172,21 +193,6 @@
                 observer.observe(produto);
             });
 
-            // Feedback visual nos botões
-            document.querySelectorAll('.btn-comprar').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const produto = this.dataset.produto;
-                    this.textContent = 'Redirecionando...';
-                    this.style.backgroundColor = 'var(--cyan)';
-                    
-                    // Simulação - aqui você colocaria o link real de compra
-                    setTimeout(() => {
-                        alert(`Compra do ${produto} - Integração com gateway de pagamento a ser implementada`);
-                        this.textContent = 'Comprar';
-                        this.style.backgroundColor = '';
-                    }, 1000);
-                });
-            });
         });
     </script>
 </body>
