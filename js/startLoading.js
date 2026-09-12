@@ -52,6 +52,7 @@
         // Remove do DOM após a transição
         setTimeout(() => {
             if (screen.parentNode) screen.parentNode.removeChild(screen);
+            window.dispatchEvent(new CustomEvent('loadingFinished'));
         }, 700);
     }
 

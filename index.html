@@ -16,6 +16,185 @@
 
     <link rel="stylesheet" href="./dist/output.css">
 
+    <style>
+        #developmentNotice {
+            position: fixed;
+            inset: 0;
+            z-index: 100000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+            background: rgba(4, 7, 16, 0.82);
+            backdrop-filter: blur(7px);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+                transition: opacity 0.35s ease, visibility 0.35s ease;
+        }
+
+        #developmentNotice.is-visible {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        #developmentNotice.is-closed {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .development-notice-panel {
+            position: relative;
+            width: min(560px, 100%);
+            max-height: calc(100dvh - 1.5rem);
+            overflow: hidden;
+            background: linear-gradient(145deg, rgba(14, 28, 55, 0.98), rgba(10, 14, 31, 0.98));
+            border: 1px solid var(--cyan);
+            box-shadow: 0 0 0 1px rgba(242, 242, 48, 0.18), 0 18px 70px rgba(0, 179, 254, 0.28);
+            transform: translateY(0);
+            transition: transform 0.35s ease;
+        }
+
+        #developmentNotice.is-closed .development-notice-panel {
+            transform: translateY(14px);
+        }
+
+        .development-notice-panel::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 38%;
+            height: 4px;
+            background: var(--yellow);
+            box-shadow: 0 0 18px rgba(242, 242, 48, 0.7);
+        }
+
+        .development-notice-image {
+            display: block;
+            width: 100%;
+            height: clamp(150px, 34vh, 280px);
+            object-fit: cover;
+            object-position: center;
+            border-bottom: 1px solid rgba(0, 179, 254, 0.45);
+        }
+
+        .development-notice-content {
+            position: relative;
+            padding: clamp(1.5rem, 4vw, 2.25rem);
+            text-align: center;
+        }
+
+        .development-notice-kicker {
+            margin: 0 0 0.55rem;
+            color: var(--yellow);
+            font-family: var(--font-display);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .development-notice-title {
+            margin: 0;
+            color: var(--white);
+            font-family: var(--font-display);
+            font-size: clamp(1.7rem, 5vw, 2.6rem);
+            font-style: italic;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            line-height: 1.05;
+            text-transform: uppercase;
+            text-shadow: 0 0 22px rgba(0, 179, 254, 0.38);
+        }
+
+        .development-notice-text {
+            max-width: 430px;
+            margin: 1rem auto 1.5rem;
+            color: var(--muted);
+            font-family: var(--font-body);
+            font-size: 0.98rem;
+            line-height: 1.65;
+        }
+
+        .development-notice-close {
+            min-width: 150px;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--cyan);
+            background: var(--cyan);
+            color: #0e1c37;
+            cursor: pointer;
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .development-notice-close:hover,
+        .development-notice-close:focus-visible {
+            border-color: var(--yellow);
+            background: var(--yellow);
+            outline: none;
+            transform: translateY(-2px);
+        }
+
+        .development-notice-dismiss {
+            position: absolute;
+            top: 0.7rem;
+            right: 0.7rem;
+            z-index: 1;
+            width: 2.2rem;
+            height: 2.2rem;
+            border: 1px solid rgba(238, 237, 241, 0.65);
+            background: rgba(4, 7, 16, 0.72);
+            color: var(--white);
+            cursor: pointer;
+            font-size: 1.35rem;
+            line-height: 1;
+            transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+        }
+
+        .development-notice-dismiss:hover,
+        .development-notice-dismiss:focus-visible {
+            border-color: var(--yellow);
+            background: var(--bg-section);
+            color: var(--yellow);
+            outline: none;
+            }
+
+        @media (max-width: 520px) {
+            #developmentNotice {
+                padding: 0.75rem;
+            }
+
+            .development-notice-image {
+                height: clamp(150px, 31vh, 240px);
+            }
+
+            .development-notice-content {
+                padding: 1.4rem 1.15rem 1.6rem;
+            }
+
+            .development-notice-text {
+                margin-top: 0.8rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #developmentNotice,
+            .development-notice-panel,
+            .development-notice-close,
+            .development-notice-dismiss {
+                transition: none;
+            }
+        }
+    </style>
+
 </head>
 
 <body>
@@ -27,6 +206,23 @@
         </video>
         <div id="loadingBar">
             <div id="loadingBarFill"></div>
+        </div>
+    </div>
+
+    <div id="developmentNotice" role="dialog" aria-modal="true" aria-labelledby="developmentNoticeTitle"
+        aria-describedby="developmentNoticeText">
+        <div class="development-notice-panel">
+            <button class="development-notice-dismiss" type="button" aria-label="Fechar aviso">&times;</button>
+            <img class="development-notice-image" src="./img/Scorpion/Fix.png" alt="Carro da Scorpion FSAE em desenvolvimento">
+            <div class="development-notice-content">
+                <p class="development-notice-kicker">Aviso importante</p>
+                <h1 id="developmentNoticeTitle" class="development-notice-title">Site em desenvolvimento</h1>
+                <p id="developmentNoticeText" class="development-notice-text">
+                    Este site ainda está em desenvolvimento e, no momento, não possui um domínio oficial.
+                    Algumas páginas e funcionalidades podem receber novidades em breve.
+                </p>
+                <button id="developmentNoticeClose" class="development-notice-close" type="button">Entendi</button>
+            </div>
         </div>
     </div>
 
@@ -162,6 +358,40 @@
 
     <script src="./js/startLoading.js"></script>
     <script src="./js/ui.js"></script>
+
+    <script>
+        (() => {
+            const notice = document.getElementById('developmentNotice');
+            const closeButton = document.getElementById('developmentNoticeClose');
+            const dismissButton = notice?.querySelector('.development-notice-dismiss');
+
+            if (!notice || !closeButton || !dismissButton) return;
+
+            const closeNotice = () => {
+                notice.classList.add('is-closed');
+                notice.setAttribute('aria-hidden', 'true');
+            };
+
+            closeButton.addEventListener('click', closeNotice);
+            dismissButton.addEventListener('click', closeNotice);
+
+            notice.addEventListener('click', (event) => {
+                if (event.target === notice) closeNotice();
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && !notice.classList.contains('is-closed')) {
+                    closeNotice();
+                }
+            });
+
+            window.addEventListener('loadingFinished', () => {
+                notice.classList.add('is-visible');
+                notice.removeAttribute('aria-hidden');
+                closeButton.focus({ preventScroll: true });
+            }, { once: true });
+        })();
+    </script>
 
 
     <script src="./node_modules/flowbite/dist/flowbite.min.js"></script>
