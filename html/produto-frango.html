@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frango Congelado Temperado — Loja Scorpion FSAE</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:ital,wght@0,400;0,500;0,600;0,700;1,700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="shortcut icon" href="../img/Scorpion/LogoOriginalCores.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="../dist/output.css">
+</head>
+
+<body>
+
+    <header class="main-tool-bar">
+        <nav>
+            <a href="../index.html" class="logo">
+                <img src="../img/Scorpion/SCORPION FSAE LOGO FULL 1.png" alt="Scorpion FSAE">
+                <span class="logo-text">Scorpion <em>FSAE</em></span>
+            </a>
+
+            <ul>
+                <li><a href="./equipe.html">Equipe</a></li>
+                <li><a href="./patrocinio.html">Patrocinadores</a></li>
+                <li><a href="./competicao.html">Competição</a></li>
+                <li><a href="./loja.html">Loja</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Migas de pão / breadcrumb -->
+    <nav class="pd-breadcrumb" aria-label="Navegação">
+        <a href="./loja.html">← Voltar à Loja</a>
+        <span aria-hidden="true">/</span>
+        <span>Frango Congelado Temperado</span>
+    </nav>
+
+    <main class="pd-wrapper">
+
+        <!-- ============================================================
+             CARROSSEL DE IMAGENS
+        ============================================================ -->
+        <div class="pd-carousel-section">
+
+            <!-- Badge Tempo Limitado sobre o carrossel -->
+            <div class="pd-badge-tempo-limitado" aria-label="Tempo Limitado">
+                Tempo Limitado
+            </div>
+
+            <div class="pd-carousel" aria-label="Imagens do produto">
+                <div class="pd-carousel-track" id="carouselTrack">
+                    <div class="pd-slide">
+                        <img src="../img/Produtos/frango.png" alt="Frango Congelado Temperado Scorpion FSAE" loading="eager">
+                    </div>
+                    <!-- Adicione novos <div class="pd-slide"> aqui para mais fotos -->
+                </div>
+
+                <!-- Botões de navegação (ocultos quando há só 1 imagem) -->
+                <button class="pd-carousel-btn pd-carousel-btn--prev" id="carouselPrev" aria-label="Imagem anterior">&#8592;</button>
+                <button class="pd-carousel-btn pd-carousel-btn--next" id="carouselNext" aria-label="Próxima imagem">&#8594;</button>
+
+                <!-- Indicadores (dots) -->
+                <div class="pd-carousel-dots" id="carouselDots" role="tablist" aria-label="Selecionar imagem"></div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+             INFORMAÇÕES DO PRODUTO
+        ============================================================ -->
+        <div class="pd-info-section">
+
+            <!-- Nome e descrição -->
+            <h1 class="pd-titulo">Frango Congelado Temperado</h1>
+            <p class="pd-descricao">150g sem pele, sem osso e empanado. Temperado artesanalmente pela equipe Scorpion FSAE. Apoie e ainda leve um produto delicioso para casa!</p>
+
+            <!-- Preço duplo -->
+            <div class="pd-preco-duplo-box">
+                <div class="pd-preco-opcao">
+                    <span class="pd-preco-label">1 pacote</span>
+                    <span class="pd-preco-valor">R$ 6,00</span>
+                </div>
+                <div class="pd-preco-divisor-v"></div>
+                <div class="pd-preco-opcao pd-preco-opcao--destaque">
+                    <span class="pd-preco-label">3 pacotes</span>
+                    <span class="pd-preco-valor">R$ 15,00</span>
+                    <span class="pd-preco-economia">Economize R$ 3,00</span>
+                </div>
+            </div>
+
+            <!-- Badge de retirada -->
+            <div class="pd-badge-retirada">
+                <!-- <span class="pd-badge-icon" aria-hidden="true"></span> -->
+                <div>
+                    <strong>Retirada presencial</strong>
+                    <p>IFSP — Campus Araraquara</p>
+                </div>
+            </div>
+
+            <!-- Botão de compra -->
+            <a
+                href="https://wa.me/16996096284"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="pd-btn-comprar p1-bnt"
+                aria-label="Comprar Frango Congelado Temperado pelo WhatsApp"
+            >
+                &nbsp; Comprar pelo WhatsApp
+            </a>
+
+            <!-- Voltar -->
+            <a href="./loja.html" class="pd-link-voltar">← Ver todos os produtos</a>
+        </div>
+
+    </main>
+
+    <script src="../js/ui.js"></script>
+    <script>
+        (() => {
+            // ── Configuração do carrossel ──────────────────────────────────
+            const slides   = document.querySelectorAll('.pd-slide');
+            const track    = document.getElementById('carouselTrack');
+            const dotsWrap = document.getElementById('carouselDots');
+            const btnPrev  = document.getElementById('carouselPrev');
+            const btnNext  = document.getElementById('carouselNext');
+
+            let current = 0;
+            const total = slides.length;
+
+            // Só exibe controles se houver mais de 1 imagem
+            if (total <= 1) {
+                btnPrev.style.display = 'none';
+                btnNext.style.display = 'none';
+            }
+
+            // Cria dots dinamicamente
+            slides.forEach((_, i) => {
+                const dot = document.createElement('button');
+                dot.classList.add('pd-dot');
+                dot.setAttribute('role', 'tab');
+                dot.setAttribute('aria-label', `Imagem ${i + 1}`);
+                dot.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+                dot.addEventListener('click', () => goTo(i));
+                dotsWrap.appendChild(dot);
+            });
+
+            const dots = dotsWrap.querySelectorAll('.pd-dot');
+
+            function goTo(index) {
+                current = (index + total) % total;
+                track.style.transform = `translateX(-${current * 100}%)`;
+                dots.forEach((d, i) => {
+                    d.classList.toggle('pd-dot--active', i === current);
+                    d.setAttribute('aria-selected', i === current ? 'true' : 'false');
+                });
+            }
+
+            goTo(0); // inicializa
+
+            btnPrev.addEventListener('click', () => goTo(current - 1));
+            btnNext.addEventListener('click', () => goTo(current + 1));
+
+            // Suporte a swipe tátil
+            let touchStartX = 0;
+            track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+            track.addEventListener('touchend',   e => {
+                const dx = e.changedTouches[0].clientX - touchStartX;
+                if (Math.abs(dx) > 40) goTo(current + (dx < 0 ? 1 : -1));
+            });
+
+            // Teclado (setas) quando o carrossel está focado
+            document.addEventListener('keydown', e => {
+                if (e.key === 'ArrowLeft')  goTo(current - 1);
+                if (e.key === 'ArrowRight') goTo(current + 1);
+            });
+        })();
+    </script>
+
+</body>
+</html>
+
