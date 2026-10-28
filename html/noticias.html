@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Scorpion FSAE - Noticias</title>
+    <meta name="description" content="Acompanhe as ultimas noticias, novidades e conquistas da equipe Scorpion FSAE.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:ital,wght@0,400;0,500;0,600;0,700;1,700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <link rel="shortcut icon" href="../img/Scorpion/LogoOriginalCores.png" type="image/x-icon">
+
+    <!-- CSS global do site (variaveis, header, loading) -->
+    <link rel="stylesheet" href="../dist/output.css">
+
+    <!-- CSS exclusivo da pagina de noticias -->
+    <link rel="stylesheet" href="../css/noticias.css">
+</head>
+
+<body>
+
+    <!-- Tela de Loading (padrao do site) -->
+    <div id="loadingScreen">
+        <video id="loadingVideo" autoplay muted loop playsinline>
+            <source src="../img/Scorpion/ScorpionRUN-opt.mp4" type="video/mp4">
+        </video>
+        <div id="loadingBar">
+            <div id="loadingBarFill"></div>
+        </div>
+    </div>
+
+    <!-- Header / Navegacao (padrao do site) -->
+    <header class="main-tool-bar">
+        <nav>
+            <a href="../index.html" class="logo">
+                <img src="../img/Scorpion/SCORPION FSAE LOGO FULL 1.png" alt="Scorpion FSAE">
+                <span class="logo-text">Scorpion <em>FSAE</em></span>
+            </a>
+
+            <ul>
+                <li><a href="./equipe.html">Equipe</a></li>
+                <li><a href="./patrocinio.html">Patrocinadores</a></li>
+                <li><a href="./competicao.html">Competicao</a></li>
+                <li><a href="./loja.html">Loja</a></li>
+                <li><a href="./noticias.html" class="nav-active">Noticias</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Secao: Hero da pagina de noticias -->
+    <section id="noticias-hero" class="noticias-hero">
+        <div class="noticias-hero-content">
+            <p class="noticias-eyebrow">Scorpion FSAE</p>
+            <h1 class="noticias-title">Noticias</h1>
+            <p class="noticias-lead">Acompanhe as novidades, conquistas e bastidores da equipe</p>
+        </div>
+        <div class="noticias-hero-line" aria-hidden="true"></div>
+    </section>
+
+    <!-- Secao: Grid de cards de noticias -->
+    <section id="noticias-grid-section">
+
+        <div class="section-header news-section-header">
+            <h2 class="news-section-title">Ultimas publicacoes</h2>
+            <span class="news-section-divider" aria-hidden="true"></span>
+        </div>
+
+        <div class="news-grid" id="newsGrid">
+
+            <!-- NOTICIA 1 -->
+            <article class="news-card news-card--featured fsae-fade" data-delay="1">
+                <a href="noticia1.html" class="news-card-link">
+                    <div class="news-card-img-wrap">
+                        <img src="../img/noticias/imagem1.jpg" alt="Scorpion FSAE durante competicao" loading="lazy">
+                        <span class="news-card-tag">Competicao</span>
+                    </div>
+                    <div class="news-card-content">
+                        <p class="news-card-date">Outubro 2026</p>
+                        <h3 class="news-card-title">Scorpion FSAE participa de nova competicao</h3>
+                        <p class="news-card-excerpt">Confira as novidades da equipe e os preparativos para a proxima competicao.</p>
+                        <span class="news-card-cta" aria-hidden="true">Leia mais</span>
+                    </div>
+                </a>
+            </article>
+
+            <!-- NOTICIA 2 -->
+            <article class="news-card fsae-fade" data-delay="2">
+                <a href="noticia2.html" class="news-card-link">
+                    <div class="news-card-img-wrap">
+                        <img src="../img/noticias/imagem2.jpg" alt="Equipe Scorpion FSAE" loading="lazy">
+                        <span class="news-card-tag">Equipe</span>
+                    </div>
+                    <div class="news-card-content">
+                        <p class="news-card-date">Outubro 2026</p>
+                        <h3 class="news-card-title">Novidades na equipe Scorpion</h3>
+                        <p class="news-card-excerpt">Fique por dentro das ultimas mudancas e novidades internas da equipe.</p>
+                        <span class="news-card-cta" aria-hidden="true">Leia mais</span>
+                    </div>
+                </a>
+            </article>
+
+            <!-- NOTICIA 3 -->
+            <article class="news-card fsae-fade" data-delay="3">
+                <a href="noticia3.html" class="news-card-link">
+                    <div class="news-card-img-wrap">
+                        <img src="../img/noticias/imagem3.jpg" alt="Carro da Scorpion FSAE" loading="lazy">
+                        <span class="news-card-tag">Projeto</span>
+                    </div>
+                    <div class="news-card-content">
+                        <p class="news-card-date">Setembro 2026</p>
+                        <h3 class="news-card-title">Desenvolvimento do novo carro</h3>
+                        <p class="news-card-excerpt">Acompanhe os detalhes do processo de desenvolvimento do nosso proximo monoposto.</p>
+                        <span class="news-card-cta" aria-hidden="true">Leia mais</span>
+                    </div>
+                </a>
+            </article>
+
+            <!-- NOTICIA 4 -->
+            <article class="news-card fsae-fade" data-delay="4">
+                <a href="noticia4.html" class="news-card-link">
+                    <div class="news-card-img-wrap">
+                        <img src="../img/noticias/imagem4.jpg" alt="Equipe Scorpion FSAE" loading="lazy">
+                        <span class="news-card-tag">Equipe</span>
+                    </div>
+                    <div class="news-card-content">
+                        <p class="news-card-date">Agosto 2026</p>
+                        <h3 class="news-card-title">Scorpion recebe novos integrantes</h3>
+                        <p class="news-card-excerpt">Conheca os novos membros que fazem parte da equipe Scorpion FSAE.</p>
+                        <span class="news-card-cta" aria-hidden="true">Leia mais</span>
+                    </div>
+                </a>
+            </article>
+
+            <!-- NOTICIA 5 -->
+            <article class="news-card fsae-fade" data-delay="5">
+                <a href="noticia5.html" class="news-card-link">
+                    <div class="news-card-img-wrap">
+                        <img src="../img/noticias/imagem5.jpg" alt="Carro da Scorpion FSAE" loading="lazy">
+                        <span class="news-card-tag">Competicao</span>
+                    </div>
+                    <div class="news-card-content">
+                        <p class="news-card-date">Julho 2026</p>
+                        <h3 class="news-card-title">Preparacao para competicao</h3>
+                        <p class="news-card-excerpt">Confira como a equipe esta se preparando para enfrentar os melhores do pais.</p>
+                        <span class="news-card-cta" aria-hidden="true">Leia mais</span>
+                    </div>
+                </a>
+            </article>
+
+        </div>
+
+    </section>
+
+    <!-- Scripts (padrao do site) -->
+    <script src="../js/startLoading.js"></script>
+    <script src="../js/ui.js"></script>
+
+    <!-- Script exclusivo da pagina de noticias -->
+    <script src="../js/noticias.js"></script>
+
+</body>
+
+</html>
